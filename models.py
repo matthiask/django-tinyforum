@@ -37,6 +37,7 @@ class BaseModel(models.Model):
         _('moderation status'),
         max_length=10,
         choices=MODERATION_STATUS_CHOICES,
+        default=GOOD,
     )
 
     objects = BaseQuerySet.as_manager()

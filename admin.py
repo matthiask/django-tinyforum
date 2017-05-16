@@ -9,6 +9,8 @@ class ThreadAdmin(admin.ModelAdmin):
     list_display = (
         'title', 'is_pinned', 'created_at', 'closed_at', 'moderation_status')
     list_filter = ('is_pinned', 'moderation_status')
+    radio_fields = {'moderation_status': admin.HORIZONTAL}
+    raw_id_fields = ('authored_by',)
     search_fields = ('title',)
 
 
@@ -19,4 +21,6 @@ class PostAdmin(admin.ModelAdmin):
         'created_at', 'moderation_status',
     )
     list_filter = ('moderation_status',)
+    radio_fields = {'moderation_status': admin.HORIZONTAL}
+    raw_id_fields = ('thread', 'authored_by')
     search_fields = ('thread__title', 'text')
