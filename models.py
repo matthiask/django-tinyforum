@@ -17,6 +17,7 @@ class BaseModel(models.Model):
     FLAGGED = 'flagged'
     COLLAPSED = 'collapsed'
     HIDDEN = 'hidden'
+
     MODERATION_STATUS_CHOICES = (
         (GOOD, _('good')),
         (FLAGGED, _('flagged')),
