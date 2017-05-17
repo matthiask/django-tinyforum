@@ -1,6 +1,6 @@
 {% extends "tinyforum/base.html" %}
 
-{% load fineforms i18n %}
+{% load fineforms i18n static %}
 
 {% block content %}
 
@@ -10,7 +10,7 @@
     <form method="post">
       {% csrf_token %}
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-      <script>$.noConflict();</script>
+      <script>$.noConflict();CKEDITOR_BASEPATH='{% static "ckeditor/ckeditor/" %}';</script>
       {{ form.media }}
       {% ff_errors form %}
       {% ff_fields form %}
