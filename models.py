@@ -2,6 +2,8 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.html import strip_tags
+from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
 
 from ckeditor.fields import RichTextField
@@ -118,6 +120,9 @@ class Post(BaseModel):
         ordering = ['created_at']
         verbose_name = _('post')
         verbose_name_plural = _('post')
+
+    def __str__(self):
+        return Truncator(strip_tags(self.text)).words(20, truncate='...')
 
     def clean(self):
         super().clean()

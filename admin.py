@@ -10,7 +10,7 @@ class ThreadAdmin(admin.ModelAdmin):
         'title', 'is_pinned', 'created_at', 'closed_at', 'moderation_status')
     list_filter = ('is_pinned', 'moderation_status')
     radio_fields = {'moderation_status': admin.HORIZONTAL}
-    raw_id_fields = ('authored_by',)
+    raw_id_fields = ('authored_by', 'latest_post')
     search_fields = ('title',)
 
 
@@ -18,9 +18,10 @@ class ThreadAdmin(admin.ModelAdmin):
 class PostAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     list_display = (
-        'created_at', 'moderation_status',
+        '__str__', 'thread', 'created_at', 'moderation_status',
     )
     list_filter = ('moderation_status',)
+    ordering = ['-created_at']
     radio_fields = {'moderation_status': admin.HORIZONTAL}
     raw_id_fields = ('thread', 'authored_by')
     search_fields = ('thread__title', 'text')
