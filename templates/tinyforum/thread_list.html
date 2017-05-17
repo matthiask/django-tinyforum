@@ -12,7 +12,7 @@
           <th></th>
           <th>{% trans 'thread' %}</th>
           <th>{% trans 'posts' %}</th>
-          <th>{% trans 'created at' %}</th>
+          <th>{% trans 'latest post' %}</th>
         </tr>
       </thead>
       <tbody>
@@ -22,11 +22,12 @@
           <td>(star)</td>
           <th>
             <a href="{{ thread.get_absolute_url }}">
-              {{ thread.title }}
+              <strong>{{ thread.title }}</strong><br>
+              {{ thread.created_at }} by {{ thread.authored_by.profile }}
             </a>
           </th>
           <td>{{ thread.post_count }}</td>
-          <td>{{ thread.created_at }}</td>
+          <td>{{ thread.latest_post.created_at }}</td>
         </tr>
         {% endfor %}
 

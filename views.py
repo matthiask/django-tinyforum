@@ -10,7 +10,10 @@ from tinyforum.utils import render_detail, render_list
 def thread_list(request):
     return render_list(
         request,
-        Thread.objects.active().select_related('latest_post'),
+        Thread.objects.active().select_related(
+            'authored_by__profile',
+            'latest_post',
+        ),
         paginate_by=50,
     )
 
