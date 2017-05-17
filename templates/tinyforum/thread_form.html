@@ -1,0 +1,21 @@
+{% extends "tinyforum/base.html" %}
+
+{% load fineforms i18n %}
+
+{% block content %}
+
+<div class="row">
+  <div class="small-12 columns">
+
+    <form method="post">
+      {% csrf_token %}
+      {% ff_errors form %}
+      {% ff_fields form %}
+      <button type="submit">{% trans 'Submit' %}</button>
+    </form>
+
+  </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "tinyforum/base.html" %}
+
+{% load i18n %}
+
+{% block content %}
+<div class="row">
+  <div class="small-12 columns">
+    <h1>Threads</h1>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>{% trans 'thread' %}</th>
+          <th>{% trans 'posts' %}</th>
+          <th>{% trans 'created at' %}</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for thread in object_list %}
+        <tr>
+          <td>(star)</td>
+          <th>
+            <a href="{{ thread.get_absolute_url }}">
+              {{ thread.title }}
+            </a>
+          </th>
+          <td>{{ thread.post_count }}</td>
+          <td>{{ thread.created_at }}</td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+
+    <a class="button" href="{% url 'tinyforum:thread-create' %}">
+      Neuen Thread erstellen
+    </a>
+  </div>
+</div>
+{% endblock %}

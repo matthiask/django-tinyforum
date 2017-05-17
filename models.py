@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -47,6 +48,11 @@ class BaseModel(models.Model):
         abstract = True
 
 
+class ThreadQuerySet(BaseQuerySet):
+    def active(self):
+        return self.visible().filter(closed_at__isnull=True)
+
+
 class Thread(BaseModel):
     title = models.CharField(
         _('title'),
@@ -62,6 +68,21 @@ class Thread(BaseModel):
         null=True,
     )
 
+    latest_post = models.OneToOneField(
+        'Post',
+        on_delete=models.SET_NULL,
+        related_name='+',
+        blank=True,
+        null=True,
+        verbose_name=_('latest post'),
+    )
+    post_count = models.IntegerField(
+        _('post count'),
+        default=0,
+    )
+
+    objects = ThreadQuerySet.as_manager()
+
     class Meta:
         ordering = ['-is_pinned', '-created_at']
         verbose_name = _('thread')
@@ -70,12 +91,23 @@ class Thread(BaseModel):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('tinyforum:thread-detail', kwargs={'pk': self.pk})
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            self.post_count = self.posts.visible().count()
+            self.latest_post = self.posts.visible().last()
+        super().save(*args, **kwargs)
+    save.alters_data = True
+
 
 class Post(BaseModel):
     thread = models.ForeignKey(
         Thread,
         on_delete=models.CASCADE,
         verbose_name=_('thread'),
+        related_name='posts',
     )
     text = RichTextField(
         _('text'),
@@ -90,3 +122,8 @@ class Post(BaseModel):
     def clean(self):
         super().clean()
         self.text = get_sanitizer('tinyforum-post').sanitize(self.text)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.thread.save()
+    save.alters_data = True

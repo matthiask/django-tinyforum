@@ -12,6 +12,15 @@ class BaseForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
         super().__init__(*args, **kwargs)
+        self.label_suffix = ''
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        if not instance.authored_by_id:
+            instance.authored_by = self.request.user
+        if commit:
+            instance.save()
+        return instance
 
 
 class CreateThreadForm(BaseForm, forms.ModelForm):
@@ -44,7 +53,7 @@ class ModerateThreadForm(BaseForm, forms.ModelForm):
         fields = ('title', 'is_pinned', 'moderation_status')
 
 
-def form_for_thread(request, instance, moderation=False):
+def form_for_thread(request, *, instance=None, moderation=False):
     kw = {
         'data': request.POST if request.method == 'POST' else None,
         'request': request,
@@ -59,29 +68,44 @@ def form_for_thread(request, instance, moderation=False):
     return None
 
 
-class CreatePostForm(BaseForm, forms.ModelForm):
+class BasePostForm(BaseForm):
+    def __init__(self, *args, **kwargs):
+        self.thread = kwargs.pop('thread')
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        if not instance.thread_id:
+            instance.thread = self.thread
+        if commit:
+            instance.save()
+        return instance
+
+
+class CreatePostForm(BasePostForm, forms.ModelForm):
     class Meta:
         model = Post
         fields = ('text',)
 
 
-class UpdatePostForm(BaseForm, forms.ModelForm):
+class UpdatePostForm(BasePostForm, forms.ModelForm):
     class Meta:
         model = Post
         fields = ('text',)
 
 
-class ModeratePostForm(forms.ModelForm):
+class ModeratePostForm(BasePostForm, forms.ModelForm):
     class Meta:
         model = Post
         fields = ('text', 'moderation_status')
 
 
-def form_for_post(request, instance, moderation=False):
+def form_for_post(request, *, thread, instance=None, moderation=False):
     kw = {
         'data': request.POST if request.method == 'POST' else None,
         'request': request,
         'instance': instance,
+        'thread': thread,
     }
     if moderation:
         return ModeratePostForm(**kw)
