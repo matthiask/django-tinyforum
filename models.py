@@ -82,6 +82,12 @@ class Thread(BaseModel):
         _('post count'),
         default=0,
     )
+    starred_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        related_name='starred_threads',
+        verbose_name=_('starred by'),
+    )
 
     objects = ThreadQuerySet.as_manager()
 

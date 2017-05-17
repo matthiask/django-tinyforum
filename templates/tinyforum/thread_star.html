@@ -1,0 +1,7 @@
+<input
+  data-set-status="{% url 'tinyforum:thread-star' pk=thread.id %}"
+  name="starred_{{ thread.id }}"
+  type="checkbox"
+  {% if status %}checked{% endif %}
+  />
+<span></span>
