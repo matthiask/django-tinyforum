@@ -2,6 +2,7 @@ from django import forms
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+from tinyforum import signals
 from tinyforum.models import Thread, Post
 
 
@@ -27,6 +28,11 @@ class CreateThreadForm(BaseForm, forms.ModelForm):
     class Meta:
         model = Thread
         fields = ('title',)
+
+    def save(self):
+        instance = super().save()
+        instance.starred_by.add(self.request.user)
+        return instance
 
 
 class UpdateThreadForm(BaseForm, forms.ModelForm):
@@ -86,6 +92,16 @@ class CreatePostForm(BasePostForm, forms.ModelForm):
     class Meta:
         model = Post
         fields = ('text',)
+
+    def save(self):
+        instance = super().save()
+        signals.post_created.send(
+            sender=Post,
+            instance=instance,
+            form=self,
+            request=self.request,
+        )
+        return instance
 
 
 class UpdatePostForm(BasePostForm, forms.ModelForm):
