@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.utils.translation import ugettext as _
 
@@ -55,6 +56,21 @@ def thread_form(request, pk=None):
         },
         template_name_suffix='_form',
     )
+
+
+def thread_star(request, pk):
+    instance = get_object_or_404(Thread, pk=pk)
+    status = bool(int(request.GET.get('status')))
+
+    if status:
+        instance.starred_by.add(request.user)
+    else:
+        instance.starred_by.remove(request.user)
+
+    return JsonResponse({
+        'thread': instance.pk,
+        'status': int(status),
+    })
 
 
 def post_form(request, pk):
