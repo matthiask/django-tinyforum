@@ -1,7 +1,10 @@
+{% load i18n %}
+<label for="star-{{thread.id}}" class="show-for-sr">{% trans 'Mark this thread' %}</label>
 <input
   data-set-status="{% url 'tinyforum:thread-star' pk=thread.id %}"
   name="starred_{{ thread.id }}"
   type="checkbox"
+  id="star-{{thread.id}}"
   {% if status %}checked{% endif %}
   />
 <span></span>
