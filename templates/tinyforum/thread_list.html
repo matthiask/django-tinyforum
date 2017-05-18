@@ -2,32 +2,38 @@
 
 {% load i18n %}
 
+{% block extra-body-class %}forum{% endblock %}
+
 {% block content %}
 <div class="row">
   <div class="small-12 columns">
     <h1>Threads</h1>
-    <table>
-      <thead>
+    <table class="thread-list">
+      <thead class="thread-list__header">
         <tr>
-          <th></th>
-          <th>{% trans 'thread' %}</th>
-          <th>{% trans 'posts' %}</th>
-          <th>{% trans 'latest post' %}</th>
+          <th class="thread-list__label"></th>
+          <th class="thread-list__title">{% trans 'Thread' %}</th>
+          <th class="thread-list__post-count">{% trans 'Posts' %}</th>
+          <th class="thread-list__author">{% trans 'Author' %}</th>
+          <th class="thread-list__latest-post">{% trans 'Latest post' %}</th>
         </tr>
       </thead>
       <tbody>
 
         {% for thread in object_list %}
-        <tr>
-          <td>(star)</td>
-          <th>
+        <tr class="thread-list__row">
+          <td class="thread-list__label"></td>
+          <td class="thread-list__title">
             <a href="{{ thread.get_absolute_url }}">
-              <strong>{{ thread.title }}</strong><br>
-              {{ thread.created_at }} by {{ thread.authored_by.profile }}
+              {{ thread.title }}
             </a>
-          </th>
-          <td>{{ thread.post_count }}</td>
-          <td>{{ thread.latest_post.created_at }}</td>
+          </td>
+          <td class="thread-list__post-count">{{ thread.post_count }}</td>
+          <td class="thread-list__author">{{ thread.authored_by.profile }}</td>
+          <td class="thread-list__latest-post">
+            <time datetime="{{ thread.latest_post.created_at|date:'c' }}">{{ thread.latest_post.created_at|date:'j.m.Y H:m' }}</time><br />
+            {{ thread.latest_post.authered_by.profile.user }}
+          </td>
         </tr>
         {% endfor %}
 

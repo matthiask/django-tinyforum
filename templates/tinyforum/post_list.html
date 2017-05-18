@@ -2,33 +2,79 @@
 
 {% load fineforms i18n %}
 
+{% block extra-body-class %}forum{% endblock %}
+
 {% block content %}
 
 <div class="row">
-  <div class="small-12 columns">
+  <section class="small-12 columns thread">
+    <header>
+      <a href="{% url 'tinyforum:thread-list' %}">&lt; {% trans 'Back to thread list' %}</a>
+      <h2 class="thread__title">{{ thread }}</h2>
+      <a class="button thread__update"
+         href="{% url 'tinyforum:thread-update' pk=thread.pk %}">Thread aktualisieren</a>
 
-    <h2>{{ thread }}</h2>
-    <a class="button"
-       href="{% url 'tinyforum:thread-update' pk=thread.pk %}">Thread aktualisieren</a>
+      <div class="thread__header">
+        <div class="row">
+          <div class="columns show-for-medium medium-2">{% trans 'Author' %}</div>
+          <div class="columns show-for-medium medium-10">{% trans 'Message' %}</div>
+        </div>
+      </div>
+    </header>
 
     {% for post in object_list %}
-    <h3>{{ post.authored_by.profile }} on {{ post.created_at }}</h3>
-    {{ post.text|safe }}
-    <a href="{% url 'tinyforum:post-update' pk=post.pk %}">Post bearbeiten</a>
+      <article class="post">
+        <div class="row">
+          <header class="columns small-12 post__header">{% trans 'Created at' %}: <time datetime="{{ post.created_at|date:'c' }}">{{ post.created_at }}</time></header>
+          <div class="columns small-12 medium-2 post__info">
+            <span class="post__author">{{ post.authored_by.profile }}</span><br />
+
+            {% if thread.authored_by == post.authored_by %}
+              <span class="post__thread-author">{% trans 'Creator of the thread' %}</span>
+            {% endif %}<br />
+            <time class="post__date-joined" datetime="{{ post.authored_by.profile.user.date_joined|date:'c' }}">{{ post.authored_by.profile.user.date_joined|date:'j.m.Y' }}</time><br />
+          </div>
+          <div class="columns small-12 medium-10 post__content">
+            {{ post.text|safe }}
+          </div>
+        </div>
+        <div class="post__footer">
+          <a href="{% url 'tinyforum:post-update' pk=post.pk %}">Post bearbeiten</a>
+          <a href="{% url 'tinyforum:post-update' pk=post.pk %}">Post bearbeiten</a>
+        </div>
+      </article>
     {% endfor %}
 
     <h3>Post</h3>
     <form method="post" action="">
       {% csrf_token %}
+
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
       <script>$.noConflict();</script>
+
       {{ form.media }}
       {% ff_errors form %}
       {% ff_fields form %}
+
       <button type="submit">{% trans 'Submit' %}</button>
     </form>
 
+  </section>
+</div>
+
+<div class="row">
+  <div class="small-12 columns pagination">
+    <a href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+
+    <a class="mark" href="?page={{ p }}">1</a>
+    <a href="?page={{ p }}">2</a>
+    <a href="?page={{ p }}">3</a>
+
+    <a href="?page={{ page_obj.next_page_number }}">&raquo;</a>
   </div>
 </div>
 
 {% endblock %}
+
+
+2001-05-15T19:00

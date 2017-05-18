@@ -1,14 +1,1 @@
 {% extends "community/base.html" %}
-
-{% block before-content %}
-<div class="row">
-  <div class="small-12 columns">
-
-    <h1>
-      <a href="{% url 'tinyforum:thread-list' %}">Forum</a>
-    </h1>
-
-  </div>
-</div>
-{{ block.super }}
-{% endblock %}
