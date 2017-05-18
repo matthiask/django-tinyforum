@@ -29,6 +29,11 @@ class CreateThreadForm(BaseForm, forms.ModelForm):
         model = Thread
         fields = ('title',)
 
+    def save(self):
+        instance = super().save()
+        instance.starred_by.add(self.request.user)
+        return instance
+
 
 class UpdateThreadForm(BaseForm, forms.ModelForm):
     close_thread = forms.BooleanField(
