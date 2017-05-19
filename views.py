@@ -1,11 +1,11 @@
 from django.contrib import messages
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import ugettext as _
 
 from tinyforum.forms import form_for_thread, form_for_post
 from tinyforum.models import Thread, Post
-from tinyforum.utils import render_detail, render_list
+from tinyforum.utils import paginate_list, render_detail, render_list
 
 
 def thread_list(request):
@@ -19,21 +19,32 @@ def thread_list(request):
     )
 
 
-def thread_detail(request, pk):
+def post_list(request, pk):
     thread = get_object_or_404(Thread.objects.visible(), pk=pk)
-    form = form_for_post(request, thread=thread)
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-        return redirect(thread)
+    if request.method == 'POST':
+        form = form_for_post(request, thread=thread)
+        if form.is_valid():
+            form.save()
+            return redirect(thread)  # TODO to last page
+    else:
+        form = None
 
-    return render_list(
+    posts = paginate_list(
         request,
         thread.posts.visible().select_related('authored_by__profile'),
-        {
-            'thread': thread,
-            'form': form,
-        },
+        paginate_by=2,
+        orphans=0,
     )
+
+    if form is None and posts.paginator.num_pages == posts.number:
+        form = form_for_post(request, thread=thread)
+
+    return render(request, 'tinyforum/post_list.html', {
+        'object_list': posts,
+        'post_list': posts,
+        'thread': thread,
+        'form': form,
+    })
 
 
 def thread_form(request, pk=None):
