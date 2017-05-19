@@ -7,7 +7,9 @@ from tinyforum import models
 class ThreadAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     list_display = (
-        'title', 'is_pinned', 'created_at', 'closed_at', 'moderation_status')
+        'title', 'is_pinned', 'authored_by', 'created_at', 'closed_at',
+        'moderation_status'
+    )
     list_filter = ('is_pinned', 'moderation_status')
     radio_fields = {'moderation_status': admin.HORIZONTAL}
     raw_id_fields = ('authored_by', 'latest_post', 'starred_by')
@@ -18,7 +20,7 @@ class ThreadAdmin(admin.ModelAdmin):
 class PostAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     list_display = (
-        '__str__', 'thread', 'created_at', 'moderation_status',
+        '__str__', 'authored_by', 'thread', 'created_at', 'moderation_status',
     )
     list_filter = ('moderation_status',)
     ordering = ['-created_at']
