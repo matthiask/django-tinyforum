@@ -48,7 +48,6 @@
       <h3>Post</h3>
       <form method="post" action="">
         {% csrf_token %}
-
         <script src="{% static 'webapp/lib/emojione.min.js' %}"></script>
         <script>CKEDITOR_BASEPATH='{% static "ckeditor/ckeditor/" %}';</script>
         {{ form.media }}
