@@ -32,8 +32,8 @@ def post_list(request, pk):
     posts = paginate_list(
         request,
         thread.posts.visible().select_related('authored_by__profile'),
-        paginate_by=2,
-        orphans=0,
+        paginate_by=20,
+        orphans=5,
     )
 
     if form is None and posts.paginator.num_pages == posts.number:
