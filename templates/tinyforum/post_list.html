@@ -10,9 +10,9 @@
   <section class="small-12 columns thread">
     <header>
       <a href="{% url 'tinyforum:thread-list' %}">&lt; {% trans 'Back to thread list' %}</a>
-      <h2 class="thread__title">{{ thread }}</h2>
+      <h1 class="thread__title">{{ thread }}</h1>
       <a class="button thread__update"
-         href="{% url 'tinyforum:thread-update' pk=thread.pk %}">Thread aktualisieren</a>
+         href="{% url 'tinyforum:thread-update' pk=thread.pk %}">{% trans 'Thread aktualisieren' %}</a>
 
       <div class="thread__header">
         <div class="row">
@@ -25,39 +25,47 @@
     {% for post in object_list %}
       <article class="post">
         <div class="row">
-          <header class="columns small-12 post__header">{% trans 'Created at' %}: <time datetime="{{ post.created_at|date:'c' }}">{{ post.created_at }}</time></header>
+          <header class="columns small-12 post__header">
+            <h2 class="show-for-sr">#{{ forloop.counter }} {% trans 'Post by' %} {{ post.authored_by.profile }}</h2>
+            {% trans 'Created at' %}: <time datetime="{{ post.created_at|date:'c' }}">{{ post.created_at }}</time>
+          </header>
           <div class="columns small-12 medium-2 post__info">
-            <span class="post__author">{{ post.authored_by.profile }}</span><br />
+            <span class="post__author">{{ post.authored_by.profile }}</span>
 
             {% if thread.authored_by == post.authored_by %}
-              <span class="post__thread-author">{% trans 'Creator of the thread' %}</span>
-            {% endif %}<br />
-            <time class="post__date-joined" datetime="{{ post.authored_by.profile.user.date_joined|date:'c' }}">{{ post.authored_by.profile.user.date_joined|date:'j.m.Y' }}</time><br />
+              <label class="post__thread-author label">{% trans 'Creator of the thread' %}</label>
+            {% endif %}
+            {# TODO: replace is_staff with correct attribute #}
+            {% if post.authored_by.profile.user.is_staff %}
+              <label class="post__thread-author label">{% trans 'Staff' %}</label>
+            {% endif %}
+
+            <span class="post__date-joined">{% trans "Joined at: " %}<time datetime="{{ post.authored_by.profile.user.date_joined|date:'c' }}">{{ post.authored_by.profile.user.date_joined|date:'j.m.Y' }}</time></span>
           </div>
           <div class="columns small-12 medium-10 post__content">
             {{ post.text|safe }}
           </div>
         </div>
         <div class="post__footer">
-          <a href="{% url 'tinyforum:post-update' pk=post.pk %}">Post bearbeiten</a>
-          <a href="{% url 'tinyforum:post-update' pk=post.pk %}">Post bearbeiten</a>
+          <a href="{% url 'tinyforum:post-update' pk=post.pk %}">{% trans "Edit post" %}</a>
         </div>
       </article>
     {% endfor %}
 
-    <h3>Post</h3>
-    <form method="post" action="">
-      {% csrf_token %}
+    <section>
+      <h2>{% trans "Write a post" %}</h2>
+      <form method="post" action="">
+        {% csrf_token %}
 
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-      <script>$.noConflict();CKEDITOR_BASEPATH='{% static "ckeditor/ckeditor/" %}';</script>
-      {{ form.media }}
-      {% ff_errors form %}
-      {% ff_fields form %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script>$.noConflict();CKEDITOR_BASEPATH='{% static "ckeditor/ckeditor/" %}';</script>
+        {{ form.media }}
+        {% ff_errors form %}
+        {% ff_fields form %}
 
-      <button type="submit">{% trans 'Submit' %}</button>
-    </form>
-
+        <button type="submit">{% trans 'Submit' %}</button>
+      </form>
+    </script>
   </section>
 </div>
 
