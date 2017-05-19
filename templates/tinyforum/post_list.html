@@ -9,11 +9,13 @@
 <div class="row">
   <section class="small-12 columns thread">
     <header>
-      <a href="{% url 'tinyforum:thread-list' %}">&lt; {% trans 'Back to thread list' %}</a>
       <h1 class="thread__title">{{ thread }}</h1>
-      <a class="button thread__update"
-         href="{% url 'tinyforum:thread-update' pk=thread.pk %}">{% trans 'Thread aktualisieren' %}</a>
-
+      <div class="clearfix">
+        <a class="back-link"
+           href="{% url 'tinyforum:thread-list' %}">{% trans 'Back to thread list' %}</a>
+        <a class="thread__update edit-link"
+           href="{% url 'tinyforum:thread-update' pk=thread.pk %}">{% trans 'Update thread' %}</a>
+      </div>
       <div class="thread__header">
         <div class="row">
           <div class="columns show-for-medium medium-2">{% trans 'Author' %}</div>
@@ -47,10 +49,34 @@
           </div>
         </div>
         <div class="post__footer">
-          <a href="{% url 'tinyforum:post-update' pk=post.pk %}">{% trans "Edit post" %}</a>
+          <a class="edit-link" href="{% url 'tinyforum:post-update' pk=post.pk %}">{% trans "Edit post" %}</a>
         </div>
       </article>
     {% endfor %}
+
+
+    {% if object_list.paginator %}
+      <div class="row">
+        <div class="small-12 columns pagination">
+          {% if object_list.has_previous %}
+            <a href="?page={{ object_list.previous_page_number }}">&laquo;</a>
+          {% else %}
+            <span>&laquo;</span>
+          {% endif %}
+
+          {% for p in object_list.paginator.page_range %}
+            <a {% if p == object_list.number %}class="mark"{% endif %} href="?page={{ p }}">{{ p }}</a>
+          {% endfor %}
+
+          {% if object_list.has_next %}
+            <a href="?page={{ object_list.next_page_number }}">&raquo;</a>
+          {% else %}
+            <span>&raquo;</span>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
 
     <section>
       {% if form %}
@@ -68,28 +94,6 @@
       {% endif %}
   </section>
 </div>
-
-{% if object_list.paginator %}
-<div class="row">
-  <div class="small-12 columns pagination">
-    {% if object_list.has_previous %}
-      <a href="?page={{ object_list.previous_page_number }}">&laquo;</a>
-    {% else %}
-      <span>&laquo;</span>
-    {% endif %}
-
-    {% for p in object_list.paginator.page_range %}
-      <a {% if p == object_list.number %}class="mark"{% endif %} href="?page={{ p }}">{{ p }}</a>
-    {% endfor %}
-
-    {% if object_list.has_next %}
-      <a href="?page={{ object_list.next_page_number }}">&raquo;</a>
-    {% else %}
-      <span>&raquo;</span>
-    {% endif %}
-  </div>
-</div>
-{% endif %}
 
 {% endblock %}
 
