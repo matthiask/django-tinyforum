@@ -25,7 +25,7 @@ def post_list(request, pk):
         form = form_for_post(request, thread=thread)
         if form.is_valid():
             form.save()
-            return redirect(thread)  # TODO to last page
+            return redirect(thread.get_absolute_url() + '?page=last')
     else:
         form = None
 

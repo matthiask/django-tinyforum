@@ -20,6 +20,10 @@ def paginate_list(request, iterable, paginate_by=None, orphans=0):
         return iterable
 
     p = paginator.Paginator(iterable, paginate_by)
+    page = request.GET.get('page')
+    if page == 'last':
+        return p.page(p.num_pages)
+
     try:
         return p.page(request.GET.get('page'))
     except paginator.PageNotAnInteger:

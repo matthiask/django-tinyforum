@@ -32,8 +32,10 @@
           <td class="thread-list__post-count">{{ thread.post_count }}</td>
           <td class="thread-list__author">{{ thread.authored_by.profile }}</td>
           <td class="thread-list__latest-post">
-            <time datetime="{{ thread.latest_post.created_at|date:'c' }}">{{ thread.latest_post.created_at|date:'j.m.Y H:m' }}</time><br />
-            {{ thread.latest_post.authered_by.profile.user }}
+            <a href="{{ thread.get_absolute_url }}?page=last">
+              <time datetime="{{ thread.latest_post.created_at|date:'c' }}">{{ thread.latest_post.created_at|date:'j.m.Y H:m' }}</time><br />
+              {{ thread.latest_post.authered_by.profile.user }}
+            </a>
           </td>
         </tr>
         {% endfor %}
