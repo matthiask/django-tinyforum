@@ -120,6 +120,12 @@ class Post(BaseModel):
     text = RichTextField(
         _('text'),
         config_name='tinyforum-post',
+        extra_plugins=['emojione'],
+        external_plugin_resources=[(
+            'emojione',
+            '/static/webapp/lib/ckeditor-emojione-1.0.1/',
+            'plugin.js',
+        )],
     )
 
     class Meta:

@@ -53,33 +53,43 @@
     {% endfor %}
 
     <section>
-      <h2>{% trans "Write a post" %}</h2>
-      <form method="post" action="">
-        {% csrf_token %}
+      {% if form %}
+        <h2>{% trans "Write a post" %}</h2>
+        <form method="post" action="">
+          {% csrf_token %}
+          <script src="{% static 'webapp/lib/emojione.min.js' %}"></script>
+          <script>CKEDITOR_BASEPATH='{% static "ckeditor/ckeditor/" %}';</script>
+          {{ form.media }}
+          {% ff_errors form %}
+          {% ff_fields form %}
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script>$.noConflict();CKEDITOR_BASEPATH='{% static "ckeditor/ckeditor/" %}';</script>
-        {{ form.media }}
-        {% ff_errors form %}
-        {% ff_fields form %}
-
-        <button type="submit">{% trans 'Submit' %}</button>
-      </form>
-    </script>
+          <button type="submit">{% trans 'Submit' %}</button>
+        </form>
+      {% endif %}
   </section>
 </div>
 
+{% if object_list.paginator %}
 <div class="row">
   <div class="small-12 columns pagination">
-    <a href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+    {% if object_list.has_previous %}
+      <a href="?page={{ object_list.previous_page_number }}">&laquo;</a>
+    {% else %}
+      <span>&laquo;</span>
+    {% endif %}
 
-    <a class="mark" href="?page={{ p }}">1</a>
-    <a href="?page={{ p }}">2</a>
-    <a href="?page={{ p }}">3</a>
+    {% for p in object_list.paginator.page_range %}
+      <a {% if p == object_list.number %}class="mark"{% endif %} href="?page={{ p }}">{{ p }}</a>
+    {% endfor %}
 
-    <a href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+    {% if object_list.has_next %}
+      <a href="?page={{ object_list.next_page_number }}">&raquo;</a>
+    {% else %}
+      <span>&raquo;</span>
+    {% endif %}
   </div>
 </div>
+{% endif %}
 
 {% endblock %}
 
