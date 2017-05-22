@@ -7,7 +7,8 @@
 {% block content %}
 <div class="row">
   <div class="small-12 columns">
-    <h1>Threads</h1>
+    <h1 class="forum__title">{% trans "Biotta Wellness Woche" %}</h1>
+    <a class="forum__add create-link" href="{% url 'tinyforum:thread-create' %}">{% trans "Create new thread" %}</a>
     <table class="thread-list">
       <thead class="thread-list__header">
         <tr>
@@ -43,9 +44,7 @@
       </tbody>
     </table>
 
-    <a class="button" href="{% url 'tinyforum:thread-create' %}">
-      Neuen Thread erstellen
-    </a>
+
   </div>
 </div>
 {% endblock %}
