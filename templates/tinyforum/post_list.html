@@ -11,10 +11,12 @@
     <header>
       <h1 class="thread__title">{{ thread }}</h1>
       <div class="clearfix">
-        <a class="back-link"
+        <a class="thread__back back-link"
            href="{% url 'tinyforum:thread-list' %}">{% trans 'Back to thread list' %}</a>
+        {% if user == thread.authored_by.profile.user %}
         <a class="thread__update edit-link"
            href="{% url 'tinyforum:thread-update' pk=thread.pk %}">{% trans 'Update thread' %}</a>
+        {% endif %}
       </div>
       <div class="thread__header">
         <div class="row">
@@ -49,7 +51,9 @@
           </div>
         </div>
         <div class="post__footer">
-          <a class="edit-link" href="{% url 'tinyforum:post-update' pk=post.pk %}">{% trans "Edit post" %}</a>
+          {% if user == post.authored_by.profile.user %}
+            <a class="edit-link" href="{% url 'tinyforum:post-update' pk=post.pk %}">{% trans "Edit post" %}</a>
+          {% endif %}
         </div>
       </article>
     {% endfor %}
