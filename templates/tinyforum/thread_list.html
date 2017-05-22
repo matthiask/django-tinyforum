@@ -8,7 +8,35 @@
 <div class="row">
   <div class="small-12 columns">
     <h1 class="forum__title">{% trans "Biotta Wellness Woche" %}</h1>
-    <a class="forum__add create-link" href="{% url 'tinyforum:thread-create' %}">{% trans "Create new thread" %}</a>
+
+    {# {% if not user.is_authenticated %} #}
+    <div class="row">
+      <div class="columns small-12 medium-6">
+        {% blocktrans %}
+          <p>Die Biotta Community bietet Ihnen vielseitige Informationen und nützliche Tipps rund um die Wellness Woche.</p>
+          <p>Falls Sie noch kein kostenloses Benutzerkonto haben, können Sie sich hier registrieren und in wenigen Minuten alle Vorteile unserer Community geniessen:</p>
+        {% endblocktrans %}
+      </div>
+      <div class="columns small-12 medium-6">
+        {% blocktrans %}
+          <h2>Welche Vorteile bietet mir die Wellness Woche Community?</h2>
+          <ul>
+            <li>Ihr persönlicher Newsletter mit den wichtigsten Tipps rund um die Wellness Woche.</li>
+            <li>Exklusive Vorteile: Vergünstigungen rund um Biotta.</li>
+            <li>Ein Austausch unter Gleichgesinnten: Im Forum finden Sie zahlreiche Fragen und Antworten rund um die Biotta Wellness Woche</li>
+          </ul>
+        {% endblocktrans %}
+      </div>
+      <div class="columns small-12">
+        <a class="login-link forum__login-link" href="{% url 'login' %}">{% trans "Login" %}</a>
+      </div>
+    </div>
+    {# {% endif %} #}
+
+    {% if user.is_authenticated %}
+      <a class="forum__add create-link" href="{% url 'tinyforum:thread-create' %}">{% trans "Create new thread" %}</a>
+    {% endif %}
+
     <table class="thread-list">
       <thead class="thread-list__header">
         <tr>
@@ -21,7 +49,7 @@
       </thead>
       <tbody>
 
-        {% for thread in object_list %}
+      {% for thread in object_list %}
         <tr class="thread-list__row">
           <td class="thread-list__label">{% thread_star thread %}</td>
           <td class="thread-list__title">
@@ -39,12 +67,32 @@
             </a>
           </td>
         </tr>
-        {% endfor %}
+      {% endfor %}
 
       </tbody>
     </table>
-
-
   </div>
 </div>
+
+{% if object_list.paginator %}
+  <div class="row">
+    <div class="small-12 columns pagination">
+      {% if object_list.has_previous %}
+        <a href="?page={{ object_list.previous_page_number }}">&laquo;</a>
+      {% else %}
+        <span class="prev">&laquo;</span>
+      {% endif %}
+
+      {% for p in object_list.paginator.page_range %}
+        <a {% if p == object_list.number %}class="mark"{% endif %} href="?page={{ p }}">{{ p }}</a>
+      {% endfor %}
+
+      {% if object_list.has_next %}
+        <a href="?page={{ object_list.next_page_number }}">&raquo;</a>
+      {% else %}
+        <span class="next">&raquo;</span>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
 {% endblock %}

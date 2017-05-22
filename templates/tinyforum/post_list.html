@@ -70,17 +70,17 @@
           {% if object_list.has_previous %}
             <a href="?page={{ object_list.previous_page_number }}">&laquo;</a>
           {% else %}
-            <span>&laquo;</span>
+            <span class="prev">&laquo;</span>
           {% endif %}
 
           {% for p in object_list.paginator.page_range %}
-            <a {% if p == object_list.number %}class="mark"{% endif %} href="?page={{ p }}">{{ p }}</a>
+            <a {% if p == object_list.number %}class="mark" aria-label="{% trans 'Current page' %}"{% endif %} href="?page={{ p }}">{{ p }}</a>
           {% endfor %}
 
           {% if object_list.has_next %}
             <a href="?page={{ object_list.next_page_number }}">&raquo;</a>
           {% else %}
-            <span>&raquo;</span>
+            <span  class="next">&raquo;</span>
           {% endif %}
         </div>
       </div>
@@ -105,6 +105,3 @@
 </div>
 
 {% endblock %}
-
-
-2001-05-15T19:00
