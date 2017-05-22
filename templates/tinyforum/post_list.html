@@ -43,8 +43,10 @@
             {% if post.authored_by.profile.user.is_staff %}
               <label class="post__thread-author label">{% trans 'Staff' %}</label>
             {% endif %}
-
-            <span class="post__date-joined">{% trans "Joined at: " %}<time datetime="{{ post.authored_by.profile.user.date_joined|date:'c' }}">{{ post.authored_by.profile.user.date_joined|date:'j.m.Y' }}</time></span>
+            <div class="post__meta">
+              <span class="post__date-joined">{% trans "Joined at: " %}<time datetime="{{ post.authored_by.profile.user.date_joined|date:'c' }}">{{ post.authored_by.profile.user.date_joined|date:'j.m.Y' }}</time></span>
+              <span class="post__post-counter">{% trans "Posts: " %} 12</span>
+            </div>
           </div>
           <div class="columns small-12 medium-10 post__content">
             {{ post.text|safe }}
