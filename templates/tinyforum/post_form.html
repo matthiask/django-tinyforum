@@ -2,21 +2,26 @@
 
 {% load fineforms i18n static %}
 
+{% block extra-body-class %}forum{% endblock %}
+
 {% block content %}
 
 <div class="row">
-  <div class="small-12 columns">
-
-    <form method="post">
-      {% csrf_token %}
-      <script src="{% static 'webapp/lib/emojione.min.js' %}"></script>
-      <script>CKEDITOR_BASEPATH='{% static "ckeditor/ckeditor/" %}';</script>
-      {{ form.media }}
-      {% ff_errors form %}
-      {% ff_fields form %}
-      <button type="submit">{% trans 'Submit' %}</button>
-    </form>
-
+  <div class="small-11 medium-10 large-9 small-centered columns post-form">
+    <div class="row">
+      <div class="columns small-11 medium-10 small-centered">
+        <h1 class="post-form__title">{% trans "Edit post" %}</h1>
+        <form method="post">
+          {% csrf_token %}
+          <script src="{% static 'webapp/lib/emojione.min.js' %}"></script>
+          <script>CKEDITOR_BASEPATH='{% static "ckeditor/ckeditor/" %}';</script>
+          {{ form.media }}
+          {% ff_errors form %}
+          {% ff_fields form %}
+          <button type="submit">{% trans 'Submit' %}</button>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 

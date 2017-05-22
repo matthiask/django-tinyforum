@@ -2,18 +2,28 @@
 
 {% load fineforms i18n %}
 
+{% block extra-body-class %}forum{% endblock %}
+
 {% block content %}
 
 <div class="row">
-  <div class="small-12 columns">
+  <div class="small-11 medium-10 large-9 small-centered columns thread-form">
+    <div class="row">
+      <div class="columns small-11 medium-10 small-centered">
+        {% if thread.title %}
+          <h1 class="thread-form__title">{% trans 'Update thread' %}</h1>
+        {% else %}
+          <h1 class="thread-form__title">{% trans 'Create thread' %}</h1>
+        {% endif %}
+        <form method="post">
+          {% csrf_token %}
+          {% ff_errors form %}
+          {% ff_fields form %}
+          <button type="submit">{% trans 'Submit' %}</button>
+        </form>
 
-    <form method="post">
-      {% csrf_token %}
-      {% ff_errors form %}
-      {% ff_fields form %}
-      <button type="submit">{% trans 'Submit' %}</button>
-    </form>
-
+      </div>
+    </div>
   </div>
 </div>
 
