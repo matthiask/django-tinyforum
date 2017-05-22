@@ -9,6 +9,7 @@
   <div class="small-12 columns">
     <h1 class="forum__title">{% trans "Biotta Wellness Woche" %}</h1>
 
+    {# TODO: Activate as soon as the forum is accessible for non authenticated users #}
     {# {% if not user.is_authenticated %} #}
     <div class="row">
       <div class="columns small-12 medium-6">
@@ -63,7 +64,7 @@
           <td class="thread-list__latest-post">
             <a href="{{ thread.get_absolute_url }}?page=last">
               <time datetime="{{ thread.latest_post.created_at|date:'c' }}">{{ thread.latest_post.created_at|date:'j.m.Y H:m' }}</time><br />
-              {{ thread.latest_post.authered_by.profile.user }}
+              {{ thread.latest_post.authored_by.profile }}
             </a>
           </td>
         </tr>
