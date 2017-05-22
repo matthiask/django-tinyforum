@@ -86,9 +86,8 @@
       </div>
     {% endif %}
 
-
-    <section class="thread__editor">
-      {% if form %}
+    {% if form %}
+      <section class="thread__editor">
         <h2>{% trans "Write a post" %}</h2>
         <form method="post" action="">
           {% csrf_token %}
@@ -100,8 +99,8 @@
 
           <button type="submit">{% trans 'Submit' %}</button>
         </form>
-      {% endif %}
-  </section>
+      </section>
+    {% endif %}
 </div>
 
 {% endblock %}
