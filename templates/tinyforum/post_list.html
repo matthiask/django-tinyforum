@@ -13,7 +13,8 @@
       <div class="clearfix">
         <a class="thread__back back-link"
            href="{% url 'tinyforum:thread-list' %}">{% trans 'Back to thread list' %}</a>
-        {% if user == thread.authored_by.profile.user %}
+        {# TODO: replace is_staff #}
+        {% if user == thread.authored_by.profile.user or user.is_staff %}
         <a class="thread__update edit-link"
            href="{% url 'tinyforum:thread-update' pk=thread.pk %}">{% trans 'Update thread' %}</a>
         {% endif %}
@@ -39,12 +40,13 @@
             {% if thread.authored_by == post.authored_by %}
               <label class="post__thread-author label">{% trans 'Creator of the thread' %}</label>
             {% endif %}
-            {# TODO: replace is_staff with correct attribute #}
+            {# TODO: replace is_staff #}
             {% if post.authored_by.profile.user.is_staff %}
               <label class="post__thread-author label">{% trans 'Staff' %}</label>
             {% endif %}
             <div class="post__meta">
               <span class="post__date-joined">{% trans "Joined at: " %}<time datetime="{{ post.authored_by.profile.user.date_joined|date:'c' }}">{{ post.authored_by.profile.user.date_joined|date:'j.m.Y' }}</time></span>
+              {# TODO: replace static post count #}
               <span class="post__post-counter">{% trans "Posts: " %} 12</span>
             </div>
           </div>
@@ -53,7 +55,8 @@
           </div>
         </div>
         <div class="post__footer">
-          {% if user == post.authored_by.profile.user %}
+          {# TODO: replace is_staff #}
+          {% if user == post.authored_by.profile.user or user.is_staff %}
             <a class="edit-link" href="{% url 'tinyforum:post-update' pk=post.pk %}">{% trans "Edit post" %}</a>
           {% endif %}
         </div>
