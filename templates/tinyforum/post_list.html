@@ -107,7 +107,9 @@
           <script>CKEDITOR_BASEPATH='{% static "ckeditor/ckeditor/" %}';</script>
           {{ form.media }}
           {% ff_errors form %}
-          {% ff_fields form %}
+          <span class="show-for-sr">{{ form.text.label_tag }}</span>
+          {% ff_field form.text type='field-plain' %}
+          {{ form.text.errors }}
 
           <button type="submit">{% trans 'Submit' %}</button>
         </form>
