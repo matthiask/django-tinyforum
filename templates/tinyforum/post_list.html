@@ -61,6 +61,18 @@
           {% endif %}
         </div>
       </article>
+    {% empty %}
+      <article class="post post--empty">
+        <div class="row">
+          <div class="columns small-12">
+            <p>
+              {% blocktrans %}
+                This thread is empty. Be the first one who posts something about this topic.
+              {% endblocktrans %}
+            </p>
+          </div>
+        </div>
+      </article>
     {% endfor %}
 
 
