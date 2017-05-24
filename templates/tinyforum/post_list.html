@@ -27,7 +27,7 @@
     </header>
 
     {% for post in object_list %}
-      <article class="post">
+      <article class="post post__state-{{ post.moderation_status }}">
         <div class="row">
           <header class="columns small-12 post__header">
             <h2 class="show-for-sr">#{{ forloop.counter }} {% trans 'Post by' %} {{ post.authored_by.profile }}</h2>
