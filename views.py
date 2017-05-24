@@ -48,7 +48,6 @@ def post_list(request, pk):
 
 
 def thread_form(request, *, pk=None, moderation=False):
-    print(request, pk, moderation)
     instance = pk and get_object_or_404(Thread, pk=pk)
     form = form_for_thread(request, instance=instance, moderation=moderation)
 
@@ -65,6 +64,11 @@ def thread_form(request, *, pk=None, moderation=False):
         instance or Thread,
         {
             'form': form,
+            'moderation': (
+                moderation and
+                instance and
+                instance.authored_by != request.user
+            ),
         },
         template_name_suffix='_form',
     )
@@ -107,6 +111,10 @@ def post_form(request, *, pk, moderation=False):
         instance,
         {
             'form': form,
+            'moderation': (
+                moderation and
+                instance.authored_by != request.user
+            ),
         },
         template_name_suffix='_form',
     )

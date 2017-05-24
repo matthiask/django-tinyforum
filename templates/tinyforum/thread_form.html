@@ -15,6 +15,9 @@
         {% else %}
           <h1 class="thread-form__title">{% trans 'Create thread' %}</h1>
         {% endif %}
+
+        {% if moderation %}<h2>Moderation</h2>{% endif %}
+
         <form method="post">
           {% csrf_token %}
           {% ff_errors form %}
@@ -26,6 +29,5 @@
     </div>
   </div>
 </div>
-
 
 {% endblock %}

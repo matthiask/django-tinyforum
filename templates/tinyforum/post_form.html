@@ -11,6 +11,9 @@
     <div class="row">
       <div class="columns small-11 medium-10 small-centered">
         <h1 class="post-form__title">{% trans "Edit post" %}</h1>
+
+        {% if moderation %}<h2>Moderation</h2>{% endif %}
+
         <form method="post">
           {% csrf_token %}
           <script src="{% static 'webapp/lib/emojione.min.js' %}"></script>
