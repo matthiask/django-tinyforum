@@ -52,7 +52,10 @@
 
       {% for thread in object_list %}
         <tr class="thread-list__row">
-          <td class="thread-list__label">{% thread_star thread %}</td>
+          <td class="thread-list__label">
+            {% thread_star thread %}
+            {% if thread.is_pinned %}&#x1f4cc;{% endif %}
+          </td>
           <td class="thread-list__title">
 
             <a href="{{ thread.get_absolute_url }}">
