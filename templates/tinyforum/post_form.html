@@ -20,6 +20,9 @@
           <span class="show-for-sr">{{ form.text.label_tag }}</span>
           {% ff_field form.text type='field-plain' %}
           {{ form.text.errors }}
+
+          {% ff_fields form exclude='text' %}
+
           <button type="submit">{% trans 'Submit' %}</button>
         </form>
       </div>

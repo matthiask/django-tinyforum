@@ -47,9 +47,10 @@ def post_list(request, pk):
     })
 
 
-def thread_form(request, pk=None):
+def thread_form(request, *, pk=None, moderation=False):
+    print(request, pk, moderation)
     instance = pk and get_object_or_404(Thread, pk=pk)
-    form = form_for_thread(request, instance=instance)  # TODO moderation?
+    form = form_for_thread(request, instance=instance, moderation=moderation)
 
     if form is None:
         messages.error(request, _('Sorry, you do not have permissions.'))
@@ -84,10 +85,14 @@ def thread_star(request, pk):
     })
 
 
-def post_form(request, pk):
+def post_form(request, *, pk, moderation=False):
     instance = get_object_or_404(Post.objects.select_related('thread'), pk=pk)
-    # TODO moderation
-    form = form_for_post(request, thread=instance.thread, instance=instance)
+    form = form_for_post(
+        request,
+        thread=instance.thread,
+        instance=instance,
+        moderation=moderation,
+    )
 
     if form is None:
         messages.error(request, _('Sorry, you do not have permissions.'))
