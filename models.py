@@ -143,4 +143,7 @@ class Post(BaseModel):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         self.thread.save()
+        self.authored_by.profile.post_count =\
+            self.authored_by.post_set.visible().count()
+        self.authored_by.profile.save()
     save.alters_data = True
