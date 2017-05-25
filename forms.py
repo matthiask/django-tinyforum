@@ -1,9 +1,10 @@
 from django import forms
 from django.utils import timezone
+from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
 
 from tinyforum import signals
-from tinyforum.models import Thread, Post
+from tinyforum.models import Thread, Post, PostReport
 
 
 class BaseForm(forms.Form):
@@ -126,3 +127,28 @@ def form_for_post(request, *, thread, instance=None, moderation=False):
     elif instance is None:
         return CreatePostForm(**kw)
     return None
+
+
+class CreatePostReportForm(BaseForm, forms.ModelForm):
+    reason = forms.ChoiceField(
+        label=capfirst(_('reason')),
+        choices=PostReport.REASON_CHOICES,
+        widget=forms.RadioSelect,
+    )
+
+    class Meta:
+        model = PostReport
+        fields = ('reason', 'notes')
+        widgets = {
+            'notes': forms.Textarea(attrs={'rows': 4}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.post = kwargs.pop('post')
+        super().__init__(*args, **kwargs)
+
+    def save(self):
+        instance = super().save(commit=False)
+        instance.post = self.post
+        instance.save()
+        return instance

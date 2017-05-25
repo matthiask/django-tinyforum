@@ -27,3 +27,12 @@ class PostAdmin(admin.ModelAdmin):
     radio_fields = {'moderation_status': admin.HORIZONTAL}
     raw_id_fields = ('thread', 'authored_by')
     search_fields = ('thread__title', 'text')
+
+
+@admin.register(models.PostReport)
+class PostReportAdmin(admin.ModelAdmin):
+    list_display = (
+        'post', 'reason', 'notes', 'handled_at', 'handled_by',
+        'moderation_status',
+    )
+    list_filter = ('reason', 'handled_at')

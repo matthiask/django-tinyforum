@@ -149,22 +149,13 @@ class Post(BaseModel):
     save.alters_data = True
 
 
-class Report(models.Model):
+class Report(BaseModel):
     REASON_CHOICES = (
         ('annoying', _("It's annoying or not interesting")),
         ('misplaced', _("I think it shouldn't be here")),
         ('spam', _("It's spam")),
     )
 
-    created_at = models.DateTimeField(
-        _('created at'),
-        default=timezone.now,
-    )
-    reported_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        verbose_name=_('authored by'),
-    )
     reason = models.CharField(
         _('reason'),
         max_length=10,
@@ -176,5 +167,38 @@ class Report(models.Model):
         help_text=_('Anything else you want to say?'),
     )
 
+    handled_at = models.DateTimeField(
+        _('handled at'),
+        blank=True, null=True,
+    )
+    handled_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        blank=True, null=True,
+        verbose_name=_('handled by'),
+        related_name='+',
+    )
+
+    moderation_status = models.CharField(
+        _('moderation status'),
+        max_length=10,
+        choices=BaseModel.MODERATION_STATUS_CHOICES,
+        blank=True,
+    )
+
     class Meta:
         abstract = True
+
+
+class PostReport(Report):
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name='reports',
+        verbose_name=_('post'),
+    )
+
+    class Meta:
+        unique_together = (('authored_by', 'post'),)
+        verbose_name = _('post report')
+        verbose_name_plural = _('post reports')

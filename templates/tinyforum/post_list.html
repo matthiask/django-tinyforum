@@ -55,6 +55,7 @@
           {% if user == post.authored_by or user.profile.has_moderation_powers %}
             <a class="edit-link" href="{% url 'tinyforum:post-update' pk=post.pk %}">{% trans "Edit post" %}</a>
           {% endif %}
+          <a class="report-link" href="{% url 'tinyforum:post-report' pk=post.pk %}">{% trans "Report post" %}</a>
         </div>
       </article>
     {% empty %}

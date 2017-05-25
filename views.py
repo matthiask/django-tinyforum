@@ -3,7 +3,10 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import ugettext as _
 
-from tinyforum.forms import form_for_thread, form_for_post
+from tinyforum.forms import (
+    form_for_thread, form_for_post,
+    CreatePostReportForm,
+)
 from tinyforum.models import Thread, Post
 from tinyforum.utils import paginate_list, render_detail, render_list
 
@@ -118,3 +121,28 @@ def post_form(request, *, pk, moderation=False):
         },
         template_name_suffix='_form',
     )
+
+
+def post_report(request, *, pk):
+    instance = get_object_or_404(Post, pk=pk)
+    if instance.reports.filter(authored_by=request.user).exists():
+        messages.info(request, _('You already reported this post.'))
+        return redirect(instance.thread)
+
+    kw = {'request': request, 'post': instance}
+    if request.method == 'POST':
+        form = CreatePostReportForm(request.POST, **kw)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _(
+                'Thank you for the report. A community moderator will'
+                ' deal with it as soon as possible!'
+            ))
+            return redirect(instance.thread)
+    else:
+        form = CreatePostReportForm(**kw)
+
+    return render(request, 'tinyforum/report_form.html', {
+        'post': instance,
+        'form': form,
+    })
