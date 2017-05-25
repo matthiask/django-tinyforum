@@ -7,13 +7,9 @@ from tinyforum.models import Thread, Post
 
 
 class BaseForm(forms.Form):
-    required_css_class = 'required'
-    error_css_class = 'error'
-
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
         super().__init__(*args, **kwargs)
-        self.label_suffix = ''
 
     def save(self, commit=True):
         instance = super().save(commit=False)
