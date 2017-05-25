@@ -147,3 +147,34 @@ class Post(BaseModel):
             self.authored_by.post_set.visible().count()
         self.authored_by.profile.save()
     save.alters_data = True
+
+
+class Report(models.Model):
+    REASON_CHOICES = (
+        ('annoying', _("It's annoying or not interesting")),
+        ('misplaced', _("I think it shouldn't be here")),
+        ('spam', _("It's spam")),
+    )
+
+    created_at = models.DateTimeField(
+        _('created at'),
+        default=timezone.now,
+    )
+    reported_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name=_('authored by'),
+    )
+    reason = models.CharField(
+        _('reason'),
+        max_length=10,
+        choices=REASON_CHOICES,
+    )
+    notes = models.TextField(
+        _('notes'),
+        blank=True,
+        help_text=_('Anything else you want to say?'),
+    )
+
+    class Meta:
+        abstract = True
