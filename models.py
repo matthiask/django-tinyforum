@@ -179,6 +179,7 @@ class Report(BaseModel):
         related_name='+',
     )
 
+    # Override BaseModel.moderation_status with a blank=True version
     moderation_status = models.CharField(
         _('moderation status'),
         max_length=10,
