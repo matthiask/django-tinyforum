@@ -10,6 +10,7 @@
   <section class="small-12 columns">
     <h2>Moderation</h2>
 
+    {% if object_list %}
     <table>
       <thead>
         <tr>
@@ -42,6 +43,12 @@
       {% endfor %}
       </tbody>
     </table>
+    {% else %}
+    <p>
+      <strong>{% trans 'Yay, all reports have been handled!' %}</strong><br>
+      <small>{% trans 'Note! Your own reports, if there are any, are not visisble to you.' %}</small>
+    </p>
+    {% endif %}
 
     {% if object_list.paginator %}
       <div class="row">
