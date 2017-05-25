@@ -36,3 +36,4 @@ class PostReportAdmin(admin.ModelAdmin):
         'moderation_status',
     )
     list_filter = ('reason', 'handled_at')
+    raw_id_fields = ('authored_by', 'handled_by', 'post')
