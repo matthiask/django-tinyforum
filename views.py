@@ -153,6 +153,8 @@ def report_list(request):
         request,
         PostReport.objects.filter(
             handled_at__isnull=True,
+        ).exclude(
+            authored_by=request.user,
         ).order_by(
             'created_at',
         ).select_related(
@@ -164,7 +166,11 @@ def report_list(request):
 
 def report_handle(request, *, pk):
     instance = get_object_or_404(
-        PostReport.objects.filter(handled_at__isnull=True),
+        PostReport.objects.filter(
+            handled_at__isnull=True,
+        ).exclude(
+            authored_by=request.user,
+        ),
         pk=pk,
     )
     kw = {'request': request, 'instance': instance}
