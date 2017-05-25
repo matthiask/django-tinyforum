@@ -1,0 +1,70 @@
+{% extends "tinyforum/base.html" %}
+
+{% load fineforms i18n static %}
+
+{% block extra-body-class %}forum{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  <section class="small-12 columns">
+    <h2>Moderation</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>{% trans 'post' %}</th>
+          <th>{% trans 'report' %}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for report in object_list %}
+        <tr>
+          <td>
+            <strong><a href="{{ report.post.thread.get_absolute_url }}">{{ report.post.thread }}</a></strong>
+            <br/>
+            {{ report.post.authored_by.profile }} ({{ report.post.authored_by.profile.post_count }} posts) at {{ report.post.created_at }}
+            <br/>
+            {{ report.post.text|safe }}
+          </td>
+          <td>
+            By {{ report.authored_by.profile }} ({{ report.authored_by.profile.post_count }} posts) at {{ report.created_at }}
+            <br/>
+            {{ report.get_reason_display }}
+            <br/>
+            {{ report.notes|linebreaksbr }}
+          </td>
+          <td>
+            <a href="{% url 'tinyforum:report-handle' pk=report.pk %}" class="button">Handle</a>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+    {% if object_list.paginator %}
+      <div class="row">
+        <div class="small-12 columns pagination">
+          {% if object_list.has_previous %}
+            <a href="?page={{ object_list.previous_page_number }}">&laquo;</a>
+          {% else %}
+            <span class="prev">&laquo;</span>
+          {% endif %}
+
+          {% for p in object_list.paginator.page_range %}
+            <a {% if p == object_list.number %}class="mark" aria-label="{% trans 'Current page' %}"{% endif %} href="?page={{ p }}">{{ p }}</a>
+          {% endfor %}
+
+          {% if object_list.has_next %}
+            <a href="?page={{ object_list.next_page_number }}">&raquo;</a>
+          {% else %}
+            <span  class="next">&raquo;</span>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -5,9 +5,9 @@ from django.utils.translation import ugettext as _
 
 from tinyforum.forms import (
     form_for_thread, form_for_post,
-    CreatePostReportForm,
+    CreatePostReportForm, HandlePostReportForm,
 )
-from tinyforum.models import Thread, Post
+from tinyforum.models import Thread, Post, PostReport
 from tinyforum.utils import paginate_list, render_detail, render_list
 
 
@@ -142,6 +142,39 @@ def post_report(request, *, pk):
     else:
         form = CreatePostReportForm(**kw)
 
+    return render(request, 'tinyforum/report_form.html', {
+        'post': instance,
+        'form': form,
+    })
+
+
+def report_list(request):
+    return render_list(
+        request,
+        PostReport.objects.filter(
+            handled_at__isnull=True,
+        ).order_by(
+            'created_at',
+        ).select_related(
+            'post__authored_by__profile',
+            'authored_by__profile',
+        ),
+    )
+
+
+def report_handle(request, *, pk):
+    instance = get_object_or_404(
+        PostReport.objects.filter(handled_at__isnull=True),
+        pk=pk,
+    )
+    kw = {'request': request, 'instance': instance}
+    if request.method == 'POST':
+        form = HandlePostReportForm(request.POST, **kw)
+        if form.is_valid():
+            form.save()
+            return redirect('tinyforum:report-list')
+    else:
+        form = HandlePostReportForm(**kw)
     return render(request, 'tinyforum/report_form.html', {
         'post': instance,
         'form': form,

@@ -152,3 +152,30 @@ class CreatePostReportForm(BaseForm, forms.ModelForm):
         instance.post = self.post
         instance.save()
         return instance
+
+
+class HandlePostReportForm(BaseForm, forms.ModelForm):
+    moderation_status = forms.ChoiceField(
+        label=capfirst(_('moderation status')),
+        choices=PostReport.MODERATION_STATUS_CHOICES,
+        widget=forms.RadioSelect,
+    )
+
+    class Meta:
+        model = PostReport
+        fields = ('moderation_status',)
+
+    def save(self):
+        instance = super().save(commit=False)
+        instance.handled_at = timezone.now()
+        instance.handled_by = self.request.user
+        instance.save()
+        instance.post.moderation_status = instance.moderation_status
+        instance.post.save()
+        signals.post_report_handled.send(
+            sender=PostReport,
+            instance=instance,
+            form=self,
+            request=self.request,
+        )
+        return instance
