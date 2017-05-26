@@ -111,6 +111,8 @@
           <button type="submit">{% trans 'Submit' %}</button>
         </form>
       </section>
+    {% elif thread.closed_at %}
+      <h2>{% trans 'This thread is closed.' %}</h2>
     {% endif %}
 </div>
 

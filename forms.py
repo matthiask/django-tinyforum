@@ -139,7 +139,9 @@ def form_for_post(request, *, thread, instance=None, moderation=False):
         'instance': instance,
         'thread': thread,
     }
-    if moderation:
+    if thread.closed_at:
+        return None
+    elif moderation:
         return ModeratePostForm(**kw)
     elif instance and request.user == instance.authored_by:
         return UpdatePostForm(**kw)
