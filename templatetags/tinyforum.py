@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 from django import template
 from django.template.loader import render_to_string
 
@@ -16,3 +18,14 @@ def thread_star(context, thread):
         'thread': thread,
         'status': thread.id in user.starred_threads_cache,
     })
+
+
+@register.simple_tag(takes_context=True)
+def pagination_link(context, page):
+    query = urlencode(
+        sorted(dict(
+            context['request'].GET.items(),
+            page=page,
+        ).items()),
+    )
+    return '?%s' % query if query else '.'

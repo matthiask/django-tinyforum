@@ -12,12 +12,19 @@ from tinyforum.utils import paginate_list, render_detail, render_list
 
 
 def thread_list(request):
+    queryset = Thread.objects.select_related(
+        'authored_by__profile',
+        'latest_post',
+    )
+
+    if request.GET.get('status') == 'closed':
+        queryset = queryset.closed()
+    else:
+        queryset = queryset.active()
+
     return render_list(
         request,
-        Thread.objects.active().select_related(
-            'authored_by__profile',
-            'latest_post',
-        ),
+        queryset,
         paginate_by=50,
     )
 

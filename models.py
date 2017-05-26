@@ -54,6 +54,9 @@ class ThreadQuerySet(BaseQuerySet):
     def active(self):
         return self.visible().filter(closed_at__isnull=True)
 
+    def closed(self):
+        return self.visible().filter(closed_at__isnull=False)
+
 
 class Thread(BaseModel):
     title = models.CharField(

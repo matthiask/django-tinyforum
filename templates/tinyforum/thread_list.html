@@ -35,7 +35,13 @@
     {# {% endif %} #}
 
     {% if user.is_authenticated %}
+      <span style="float:right">
+        Status:
+        <a class="#" href=".">{% trans "Active" %}</a>
+        <a class="#" href="?status=closed">{% trans "Closed" %}</a>
+      </span>
       <a class="forum__add create-link" href="{% url 'tinyforum:thread-create' %}">{% trans "Create new thread" %}</a>
+
     {% endif %}
 
     <table class="thread-list">
@@ -88,7 +94,7 @@
       {% endif %}
 
       {% for p in object_list.paginator.page_range %}
-        <a {% if p == object_list.number %}class="mark"{% endif %} href="?page={{ p }}">{{ p }}</a>
+        <a {% if p == object_list.number %}class="mark"{% endif %} href="{% pagination_link p %}">{{ p }}</a>
       {% endfor %}
 
       {% if object_list.has_next %}
