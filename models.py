@@ -63,6 +63,7 @@ class Thread(BaseModel):
     is_pinned = models.BooleanField(
         _('is pinned'),
         default=False,
+        help_text=_('Pinned threads are shown at the top of the thread list.'),
     )
     closed_at = models.DateTimeField(
         _('closed at'),

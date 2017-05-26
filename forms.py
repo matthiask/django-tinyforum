@@ -33,14 +33,21 @@ class CreateThreadForm(BaseForm, forms.ModelForm):
 
 
 class UpdateThreadForm(BaseForm, forms.ModelForm):
-    close_thread = forms.BooleanField(
-        label=_('Close thread'),
-        required=False,
-    )
-
     class Meta:
         model = Thread
         fields = ('title',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.instance.closed_at:
+            self.fields['close_thread'] = forms.BooleanField(
+                label=_('Close thread'),
+                required=False,
+                help_text=_(
+                    'The thread will still be visible, but no posts'
+                    ' can be added to it.'
+                ),
+            )
 
     def save(self):
         instance = super().save(commit=False)
@@ -50,7 +57,13 @@ class UpdateThreadForm(BaseForm, forms.ModelForm):
         return instance
 
 
-class ModerateThreadForm(BaseForm, forms.ModelForm):
+class ModerateThreadForm(UpdateThreadForm, forms.ModelForm):
+    moderation_status = forms.ChoiceField(
+        label=capfirst(_('moderation status')),
+        choices=PostReport.MODERATION_STATUS_CHOICES,
+        widget=forms.RadioSelect,
+    )
+
     class Meta:
         model = Thread
         fields = ('title', 'is_pinned', 'moderation_status')
@@ -108,6 +121,12 @@ class UpdatePostForm(BasePostForm, forms.ModelForm):
 
 
 class ModeratePostForm(BasePostForm, forms.ModelForm):
+    moderation_status = forms.ChoiceField(
+        label=capfirst(_('moderation status')),
+        choices=PostReport.MODERATION_STATUS_CHOICES,
+        widget=forms.RadioSelect,
+    )
+
     class Meta:
         model = Post
         fields = ('text', 'moderation_status')
