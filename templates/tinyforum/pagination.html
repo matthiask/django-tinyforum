@@ -1,0 +1,23 @@
+{% load i18n tinyforum %}
+
+{% if object_list.paginator %}
+  <div class="row">
+    <div class="small-12 columns pagination">
+      {% if object_list.has_previous %}
+        <a href="?page={{ object_list.previous_page_number }}">&laquo;</a>
+      {% else %}
+        <span class="prev">&laquo;</span>
+      {% endif %}
+
+      {% for p in object_list.paginator.page_range %}
+        <a {% if p == object_list.number %}class="mark" aria-label="{% trans 'Current page' %}"{% endif %} href="{% pagination_link p %}">{{ p }}</a>
+      {% endfor %}
+
+      {% if object_list.has_next %}
+        <a href="?page={{ object_list.next_page_number }}">&raquo;</a>
+      {% else %}
+        <span class="next">&raquo;</span>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
