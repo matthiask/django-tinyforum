@@ -4,12 +4,15 @@
 
 {% block extra-body-class %}forum{% endblock %}
 
-{% block content %}
+{% block lead-title %}
+  <h1>{{ thread }}</h1>
+{% endblock %}
+
+{% block main-region %}
 
 <div class="row">
   <section class="small-12 columns thread">
     <header>
-      <h1 class="thread__title">{{ thread }}</h1>
       <div class="clearfix">
         <a class="thread__back back-link"
            href="{% url 'tinyforum:thread-list' %}">{% trans 'Back to thread list' %}</a>
@@ -91,7 +94,9 @@
         </form>
       </section>
     {% elif thread.closed_at %}
-      <h2>{% trans 'This thread is closed.' %}</h2>
+      <section>
+        <h2 class="text-center">{% trans 'This thread is closed.' %}</h2>
+      </section>
     {% endif %}
 </div>
 

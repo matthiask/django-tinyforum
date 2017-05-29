@@ -4,11 +4,16 @@
 
 {% block extra-body-class %}forum{% endblock %}
 
-{% block content %}
-<div class="row">
-  <div class="small-12 columns">
-    <h1 class="forum__title">{% trans "Biotta Wellness Woche" %}</h1>
+{% block lead-title %}
+  <h1>{% trans "Biotta Wellness Woche" %}</h1>
+{% endblock %}
 
+{% block lead-right %}
+  <p>We’d like to be there for you - our customers and our partners - when you need us. Find out here how to contact us, and about vacancies and sales.</p>
+{% endblock %}
+
+
+{% block main-region-content %}
     {# TODO: Activate as soon as the forum is accessible for non authenticated users #}
     {# {% if not user.is_authenticated %} #}
     <div class="row">
@@ -36,7 +41,7 @@
 
     {% if user.is_authenticated %}
       <span class="thread-filter">
-        Status:
+        {% trans "Status" %}:
         <a class="thread-filter__link{% if request.GET.status != "closed" %} thread-filter__link--active{% endif %}" href=".">{% trans "Active" %}</a>
         <a class="thread-filter__link{% ifequal request.GET.status "closed" %} thread-filter__link--active{% endifequal %}" href="?status=closed">{% trans "Closed" %}</a>
       </span>
@@ -81,8 +86,6 @@
 
       </tbody>
     </table>
-  </div>
-</div>
 
 {% include "tinyforum/pagination.html" %}
 
