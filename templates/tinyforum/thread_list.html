@@ -35,10 +35,10 @@
     {# {% endif %} #}
 
     {% if user.is_authenticated %}
-      <span style="float:right">
+      <span class="thread-filter">
         Status:
-        <a class="#" href=".">{% trans "Active" %}</a>
-        <a class="#" href="?status=closed">{% trans "Closed" %}</a>
+        <a class="thread-filter__link{% if request.GET.status != "closed" %} thread-filter__link--active{% endif %}" href=".">{% trans "Active" %}</a>
+        <a class="thread-filter__link{% ifequal request.GET.status "closed" %} thread-filter__link--active{% endifequal %}" href="?status=closed">{% trans "Closed" %}</a>
       </span>
       <a class="forum__add create-link" href="{% url 'tinyforum:thread-create' %}">{% trans "Create new thread" %}</a>
 
