@@ -4,17 +4,20 @@
 
 {% block extra-body-class %}forum{% endblock %}
 
-{% block content %}
+{% block lead-title %}
+  {% if thread.title %}
+    <h1>{% trans 'Update thread' %}</h1>
+  {% else %}
+    <h1>{% trans 'Create thread' %}</h1>
+  {% endif %}
+{% endblock %}
+
+{% block main-region %}
 
 <div class="row">
   <div class="small-11 medium-10 large-9 small-centered columns thread-form">
     <div class="row">
       <div class="columns small-11 medium-10 small-centered">
-        {% if thread.title %}
-          <h1 class="thread-form__title">{% trans 'Update thread' %}</h1>
-        {% else %}
-          <h1 class="thread-form__title">{% trans 'Create thread' %}</h1>
-        {% endif %}
 
         {% if moderation %}<h2>Moderation</h2>{% endif %}
 

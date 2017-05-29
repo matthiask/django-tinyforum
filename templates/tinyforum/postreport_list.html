@@ -4,12 +4,14 @@
 
 {% block extra-body-class %}forum{% endblock %}
 
-{% block content %}
+{% block lead-title %}
+  <h1>{% trans "Moderation" %}</h1>
+{% endblock %}
+
+{% block main-region-content %}
 
 <div class="row">
   <section class="small-12 columns">
-    <h2>Moderation</h2>
-
     {% if object_list %}
     <table>
       <thead>
