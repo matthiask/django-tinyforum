@@ -1,6 +1,6 @@
 {% extends "tinyforum/base.html" %}
 
-{% load i18n tinyforum %}
+{% load i18n tinyforum staticfiles %}
 
 {% block extra-body-class %}forum{% endblock %}
 
@@ -15,27 +15,40 @@
 
 {% block main-region-content %}
     {# TODO: Activate as soon as the forum is accessible for non authenticated users #}
-    {# {% if not user.is_authenticated %} #}
+    {# {% if user.is_authenticated %} #}
     <div class="row">
-      <div class="columns small-12 medium-6">
-        {% blocktrans %}
-          <p>Die Biotta Community bietet Ihnen vielseitige Informationen und nützliche Tipps rund um die Wellness Woche.</p>
-          <p>Falls Sie noch kein kostenloses Benutzerkonto haben, können Sie sich hier registrieren und in wenigen Minuten alle Vorteile unserer Community geniessen:</p>
-        {% endblocktrans %}
+      <div class="columns small-12 medium-8">
+        <h2>{% trans "The community" %}</h2>
+          {% blocktrans %}
+            <p>Wir freuen uns, dass Sie mehr über die Biotta Wellness Woche erfahren möchten. In der Biotta Community haben Sie die Möglichkeit, sich über aktuelle Themen im Forum zu informieren oder durch die häufigsten Fragen & Antworten zur Wellness Woche zu stöbern. Neu ist auch der exklusive 7-tägige Newsletter, der Sie während Ihrer Wellness Woche begleitet und Tipps für jeden Wellness Tag bereithält.</p>
+          {% endblocktrans %}
+
       </div>
-      <div class="columns small-12 medium-6">
-        {% blocktrans %}
-          <h2>Welche Vorteile bietet mir die Wellness Woche Community?</h2>
-          <ul>
-            <li>Ihr persönlicher Newsletter mit den wichtigsten Tipps rund um die Wellness Woche.</li>
-            <li>Exklusive Vorteile: Vergünstigungen rund um Biotta.</li>
-            <li>Ein Austausch unter Gleichgesinnten: Im Forum finden Sie zahlreiche Fragen und Antworten rund um die Biotta Wellness Woche</li>
-          </ul>
-        {% endblocktrans %}
+      <div class="columns small-12 medium-4">
+        <section class="forum__box">
+          <h2>{% trans "Code activation" %}</h2>
+          {% blocktrans %}
+            <p>Mit Ihrem Booklet-Code können Sie weitere exklusive Funktionen der Community freischalten.</p>
+          {% endblocktrans %}
+            <form name="activation" action="." method="POST">
+              <label for="activation_code">{% trans "Activation code" %}</label>
+              <input type="text" name="activation_code" />
+              <button class="small float-right">{% trans "Activate" %}</button>
+            </form>
+        </section>
+        <section class="forum__box">
+          <h2>{% trans "Newsletter" %}</h2>
+          {% blocktrans %}
+              <p>Tägliche Tipps und Infos begleiten Sie während Ihrer Wellness Woche.</p>
+          {% endblocktrans %}
+          <a href="{% url 'wellnessweek-overview' %}">{% trans "Ihren Wochenstart festlegen" %}</a>
+        </section>
       </div>
+      {% comment %}
       <div class="columns small-12">
         <a class="login-link forum__login-link" href="{% url 'login' %}">{% trans "Login" %}</a>
       </div>
+      {% endcomment %}
     </div>
     {# {% endif %} #}
 
@@ -52,6 +65,7 @@
     <table class="thread-list">
       <thead class="thread-list__header">
         <tr>
+          <th class="thread-list__pin"></th>
           <th class="thread-list__label"></th>
           <th class="thread-list__title">{% trans 'Thread' %}</th>
           <th class="thread-list__post-count">{% trans 'Posts' %}</th>
@@ -63,9 +77,11 @@
 
       {% for thread in object_list %}
         <tr class="thread-list__row">
+          <td class="thread-list__pin">
+            {% if thread.is_pinned %}<img src="{% static "webapp/images/pin.svg" %}" alt="{% trans "Pinned" %}" />{% endif %}
+          </td>
           <td class="thread-list__label">
             {% thread_star thread %}
-            {% if thread.is_pinned %}&#x1f4cc;{% endif %}
           </td>
           <td class="thread-list__title">
 
