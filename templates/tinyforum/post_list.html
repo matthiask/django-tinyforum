@@ -69,7 +69,7 @@
 
           </div>
         </div>
-        <div class="post__footer">
+        <footer class="post__footer">
           {% if user == post.authored_by or user.profile.has_moderation_powers %}
             <a class="edit-link" href="{% url 'tinyforum:post-update' pk=post.pk %}">{% trans "Edit post" %}</a>
           {% endif %}
@@ -79,7 +79,7 @@
               <small>{% trans "This post has been reported." %}</small>
             </div>
           {% endif %}
-        </div>
+        </footer>
       </article>
     {% empty %}
       <article class="post post--empty">
