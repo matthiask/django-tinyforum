@@ -12,44 +12,41 @@
 
 <div class="row">
   <section class="small-12 columns">
+
     {% if object_list %}
-    <table>
-      <thead>
-        <tr>
-          <th>{% trans 'post' %}</th>
-          <th>{% trans 'report' %}</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
+      <ul class="report-list">
       {% for report in object_list %}
-        <tr>
-          <td>
-            <strong><a href="{{ report.post.thread.get_absolute_url }}">{{ report.post.thread }}</a></strong>
-            <br/>
-            {{ report.post.authored_by.profile }} ({{ report.post.authored_by.profile.post_count }} posts) at {{ report.post.created_at }}
-            <br/>
-            {{ report.post.text|safe }}
-          </td>
-          <td>
-            By {{ report.authored_by.profile }} ({{ report.authored_by.profile.post_count }} posts) at {{ report.created_at }}
-            <br/>
-            {{ report.get_reason_display }}
-            <br/>
-            {{ report.notes|linebreaksbr }}
-          </td>
-          <td>
-            <a href="{% url 'tinyforum:report-handle' pk=report.pk %}" class="button">Handle</a>
-          </td>
-        </tr>
+        <li class="report-list__row">
+          <article>
+            <div class="report-list__report">
+            <h2>{% trans "Report by" %} {{ report.authored_by.profile }} {% trans "at" %} <time datetime="{{ report.created_at|date:'c' }}">{{ report.created_at|date:'d.m.Y H:m' }}</time>:</h2>
+            <h3>{% trans "Reason" %}:</h3>
+            <p>{{ report.get_reason_display }}</p>
+
+            {% if report.notes|length > 0 %}
+              <h3>{% trans "Notes" %}:</h3>
+              <p>{{ report.notes|linebreaksbr }}</p>
+            {% endif %}
+            </div>
+            <div class="report-list__post">
+            <h3>{% trans "Post" %}:</h3>
+            {% trans "By" %} {{ report.post.authored_by.profile }} {% trans "at" %} <time datetime="{{ report.post.created_at|date:'c' }}">{{ report.post.created_at|date:'d.m.Y H:m' }}</time> {% trans "in" %} <a href="{{ report.post.thread.get_absolute_url }}">{{ report.post.thread }}</a>:
+            <div class="report-list__post-content">
+              {{ report.post.text|safe }}
+            </div>
+            </div>
+            <a href="{% url 'tinyforum:report-handle' pk=report.pk %}" class="report-link">Handle</a>
+          </article>
+        </li>
       {% endfor %}
-      </tbody>
-    </table>
+      </ul>
     {% else %}
-    <p>
-      <strong>{% trans 'Yay, all reports have been handled!' %}</strong><br>
-      <small>{% trans 'Note! Your own reports, if there are any, are not visisble to you.' %}</small>
-    </p>
+    <section>
+        <h2>{% trans 'Yay, all reports have been handled!' %}</h2>
+      <p>
+        {% trans 'Note! Your own reports, if there are any, are not visisble to you.' %}
+      </p>
+    </section>
     {% endif %}
 
     {% include "tinyforum/pagination.html" %}

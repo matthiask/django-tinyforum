@@ -4,14 +4,17 @@
 
 {% block extra-body-class %}forum{% endblock %}
 
-{% block content %}
+{% block lead-title %}
+  <h1>{% trans 'Report post' %}</h1>
+{% endblock %}
+
+{% block main-region %}
 
 <div class="row">
   <div class="small-11 medium-10 large-9 small-centered columns post-form">
     <div class="row">
       <div class="columns small-11 medium-10 small-centered">
-        <h1 class="post-form__title">{% trans "Report post" %}</h1>
-
+        {{ report }}
         <form method="post">
           {% csrf_token %}
           {% ff_errors form %}
