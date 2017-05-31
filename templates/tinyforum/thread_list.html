@@ -32,7 +32,7 @@
           {% endblocktrans %}
             <form name="activation" action="." method="POST">
               <label for="activation_code">{% trans "Activation code" %}</label>
-              <input type="text" name="activation_code" />
+              <input type="text" name="activation_code" id="activation_code"/>
               <button class="small float-right">{% trans "Activate" %}</button>
             </form>
         </section>
@@ -93,7 +93,7 @@
           <td class="thread-list__author">{{ thread.authored_by.profile }}</td>
           <td class="thread-list__latest-post">
             <a href="{{ thread.get_absolute_url }}?page=last">
-              <time datetime="{{ thread.latest_post.created_at|date:'c' }}">{{ thread.latest_post.created_at|date:'j.m.Y H:m' }}</time><br />
+              <time datetime="{{ thread.latest_post.created_at|date:'Y-m-d\TH:i' }}">{{ thread.latest_post.created_at|date:'j.m.Y H:i' }}</time><br />
               {{ thread.latest_post.authored_by.profile }}
             </a>
           </td>

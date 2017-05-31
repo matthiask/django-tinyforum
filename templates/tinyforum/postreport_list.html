@@ -19,7 +19,7 @@
         <li class="report-list__row">
           <article>
             <div class="report-list__report">
-            <h2>{% trans "Report by" %} {{ report.authored_by.profile }} {% trans "at" %} <time datetime="{{ report.created_at|date:'c' }}">{{ report.created_at|date:'d.m.Y H:m' }}</time>:</h2>
+            <h2>{% trans "Report by" %} {{ report.authored_by.profile }} {% trans "at" %} <time datetime="{{ report.created_at|date:'Y-m-d\TH:i' }}">{{ report.created_at|date:'d.m.Y H:i' }}</time>:</h2>
             <h3>{% trans "Reason" %}:</h3>
             <p>{{ report.get_reason_display }}</p>
 
@@ -30,7 +30,7 @@
             </div>
             <div class="report-list__post">
             <h3>{% trans "Post" %}:</h3>
-            {% trans "By" %} {{ report.post.authored_by.profile }} {% trans "at" %} <time datetime="{{ report.post.created_at|date:'c' }}">{{ report.post.created_at|date:'d.m.Y H:m' }}</time> {% trans "in" %} <a href="{{ report.post.thread.get_absolute_url }}">{{ report.post.thread }}</a>:
+            {% trans "By" %} {{ report.post.authored_by.profile }} {% trans "at" %} <time datetime="{{ report.post.created_at|date:'Y-m-d\TH:i' }}">{{ report.post.created_at|date:'d.m.Y H:i' }}</time> {% trans "in" %} <a href="{{ report.post.thread.get_absolute_url }}">{{ report.post.thread }}</a>:
             <div class="report-list__post-content">
               {{ report.post.text|safe }}
             </div>
@@ -41,16 +41,15 @@
       {% endfor %}
       </ul>
     {% else %}
-    <section>
-        <h2>{% trans 'Yay, all reports have been handled!' %}</h2>
+      <h2>{% trans 'Yay, all reports have been handled!' %}</h2>
       <p>
         {% trans 'Note! Your own reports, if there are any, are not visisble to you.' %}
       </p>
-    </section>
     {% endif %}
 
     {% include "tinyforum/pagination.html" %}
 
+  </section>
 </div>
 
 {% endblock %}
