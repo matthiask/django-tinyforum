@@ -51,7 +51,22 @@
             </div>
           </div>
           <div class="columns small-12 medium-10 post__content">
-            {{ post.text|safe }}
+            {% if post.moderation_status == 'collapsed' %}
+              <div class="post-collapse" data-collapse-show="{% trans "Show post" %}" data-collapse-hide="{% trans "Hide post" %}" data-collapse>
+                <p class="post-collapse__description">
+                  {% blocktrans %}
+                    This post has been collapsed by a moderator.
+                  {% endblocktrans %}
+                </p>
+                <a href="#" class="forum-link" data-collapse-button>{% trans "Show post" %}</a>
+                <div class="post-collapse__content" data-collapse-content>
+                  {{ post.text|safe }}
+                </div>
+              </div>
+            {% else %}
+              {{ post.text|safe }}
+            {% endif %}
+
           </div>
         </div>
         <div class="post__footer">
@@ -59,6 +74,11 @@
             <a class="edit-link" href="{% url 'tinyforum:post-update' pk=post.pk %}">{% trans "Edit post" %}</a>
           {% endif %}
           <a class="report-link" href="{% url 'tinyforum:post-report' pk=post.pk %}">{% trans "Report post" %}</a>
+          {% if post.moderation_status == 'flagged' %}
+            <div>
+              <small>{% trans "This post has been reported." %}</small>
+            </div>
+          {% endif %}
         </div>
       </article>
     {% empty %}
