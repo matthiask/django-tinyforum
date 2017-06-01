@@ -15,17 +15,18 @@
 
 {% block main-region-content %}
   <div class="forum__controls">
-    <span class="thread-filter">
-      {% trans "Status" %}:
-      <a class="thread-filter__link{% if request.GET.status != "closed" %} thread-filter__link--active{% endif %}" href=".">{% trans "Active" %}</a>
-      <a class="thread-filter__link{% ifequal request.GET.status "closed" %} thread-filter__link--active{% endifequal %}" href="?status=closed">{% trans "Closed" %}</a>
-    </span>
 
     {% if user.is_authenticated %}
       <a class="forum__add create-link" href="{% url 'tinyforum:thread-create' %}">{% trans "Create new thread" %}</a>
     {% else %}
       <a class="login-link forum__login-link" href="{% url 'login' %}">{% trans "Login" %}</a>
     {% endif %}
+
+    <span class="thread-filter">
+      {% trans "Status" %}:
+      <a class="thread-filter__link{% if request.GET.status != "closed" %} thread-filter__link--active{% endif %}" href=".">{% trans "Active" %}</a>
+      <a class="thread-filter__link{% ifequal request.GET.status "closed" %} thread-filter__link--active{% endifequal %}" href="?status=closed">{% trans "Closed" %}</a>
+    </span>
   </div>
 
   <table class="thread-list">
