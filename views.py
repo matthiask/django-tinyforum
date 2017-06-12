@@ -31,7 +31,7 @@ def thread_list(request):
 
 def post_list(request, pk):
     thread = get_object_or_404(Thread.objects.visible(), pk=pk)
-    if request.method == 'POST':
+    if request.user.is_authenticated and request.method == 'POST':
         form = form_for_post(request, thread=thread)
         if form.is_valid():
             form.save()
@@ -46,7 +46,9 @@ def post_list(request, pk):
         orphans=5,
     )
 
-    if form is None and posts.paginator.num_pages == posts.number:
+    if (request.user.is_authenticated and
+            form is None and
+            posts.paginator.num_pages == posts.number):
         form = form_for_post(request, thread=thread)
 
     return render(request, 'tinyforum/post_list.html', {

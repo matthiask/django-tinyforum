@@ -10,6 +10,9 @@ register = template.Library()
 @register.simple_tag(takes_context=True)
 def thread_star(context, thread):
     user = context['request'].user
+    if not user.is_authenticated:
+        return ''
+
     if not hasattr(user, 'starred_threads_cache'):
         user.starred_threads_cache = list(
             user.starred_threads.values_list('id', flat=True)
