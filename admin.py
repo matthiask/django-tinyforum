@@ -12,7 +12,8 @@ class ThreadAdmin(admin.ModelAdmin):
     )
     list_filter = ('is_pinned', 'moderation_status')
     radio_fields = {'moderation_status': admin.HORIZONTAL}
-    raw_id_fields = ('authored_by', 'latest_post', 'starred_by')
+    filter_horizontal = ('starred_by',)
+    raw_id_fields = ('authored_by', 'latest_post')
     search_fields = ('title',)
 
 
