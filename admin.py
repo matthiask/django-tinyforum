@@ -12,8 +12,9 @@ class ThreadAdmin(admin.ModelAdmin):
     )
     list_filter = ('is_pinned', 'moderation_status')
     radio_fields = {'moderation_status': admin.HORIZONTAL}
-    filter_horizontal = ('starred_by',)
-    raw_id_fields = ('authored_by', 'latest_post')
+    # starred_by/m2m is unusable with raw_id_fields, but it prevents loading
+    # all users into a single list in the admin form.
+    raw_id_fields = ('authored_by', 'latest_post', 'starred_by')
     search_fields = ('title',)
 
 
