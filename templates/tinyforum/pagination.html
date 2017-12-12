@@ -10,7 +10,27 @@
       {% endif %}
 
       {% for p in object_list.paginator.page_range %}
-        <a {% if p == object_list.number %}class="mark" aria-label="{% trans 'Current page' %}"{% endif %} href="{% pagination_link p %}">{{ p }}</a>
+
+        {% if forloop.first and not p == object_list.number %}
+          <a href="{% pagination_link p %}">{{ p }}</a>
+        {% elif forloop.last and not p == object_list.number %}
+          <a href="{% pagination_link p %}">{{ p }}</a>
+        {% elif p <= object_list.number|add:3 and p >= object_list.number|add:-3 %}
+
+          {% if p == object_list.number|add:-3 %}
+            <span>…</span>
+          {% endif %}
+
+          {% ifequal p object_list.number %}
+            <a class="mark" aria-label="{% trans 'Current page' %}" href="{% pagination_link p %}">{{ p }}</a>
+          {% else %}
+            <a href="{% pagination_link p %}">{{ p }}</a>
+          {% endifequal %}
+
+          {% if p == object_list.number|add:3 %}
+            <span>…</span>
+          {% endif %}
+        {% endif %}
       {% endfor %}
 
       {% if object_list.has_next %}
@@ -21,3 +41,6 @@
     </div>
   </div>
 {% endif %}
+
+
+
