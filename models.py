@@ -104,6 +104,8 @@ class Thread(BaseModel):
         return self.title
 
     def get_absolute_url(self):
+        if self.moderation_status == self.HIDDEN:
+            return reverse('tinyforum:thread-list')
         return reverse('tinyforum:thread-detail', kwargs={'pk': self.pk})
 
     def save(self, *args, **kwargs):
