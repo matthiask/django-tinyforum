@@ -14,7 +14,9 @@ from tinyforum.utils import paginate_list, render_detail, render_list
 
 
 def thread_list(request):
-    queryset = Thread.objects.select_related("authored_by__profile", "latest_post")
+    queryset = Thread.objects.select_related(
+        "authored_by__profile", "latest_post__authored_by__profile"
+    )
 
     if request.GET.get("status") == "closed":
         queryset = queryset.closed()
