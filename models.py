@@ -142,11 +142,8 @@ class Post(BaseModel):
     def __str__(self):
         return Truncator(strip_tags(self.text)).words(20, truncate='...')
 
-    def clean(self):
-        super().clean()
-        self.text = get_sanitizer('tinyforum-post').sanitize(self.text)
-
     def save(self, *args, **kwargs):
+        self.text = get_sanitizer('tinyforum-post').sanitize(self.text)
         super().save(*args, **kwargs)
         self.thread.save()
         self.authored_by.profile.post_count =\

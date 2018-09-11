@@ -4,6 +4,7 @@ from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
 
 from ckeditor.fields import RichTextFormField
+
 from tinyforum import signals
 from tinyforum.models import Thread, Post, PostReport
 
