@@ -4,6 +4,8 @@
 
 {% block extra-body-class %}forum{% endblock %}
 
+{% block title %}{{ thread }} - {% trans 'Forum' %} - {{ block.super }}{% endblock %}
+
 {% block main-region %}
 
 <div class="row">
