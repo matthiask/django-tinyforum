@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
 
+from ckeditor.fields import RichTextFormField
 from tinyforum import signals
 from tinyforum.models import Thread, Post, PostReport
 
@@ -22,6 +23,17 @@ class BaseForm(forms.Form):
 
 
 class CreateThreadForm(BaseForm, forms.ModelForm):
+    text = RichTextFormField(
+        label=_('text'),
+        config_name='tinyforum-post',
+        extra_plugins=['emojione'],
+        external_plugin_resources=[(
+            'emojione',
+            '/static/webapp/lib/ckeditor-emojione-1.0.1/',
+            'plugin.js',
+        )],
+    )
+
     class Meta:
         model = Thread
         fields = ('title',)
@@ -29,6 +41,10 @@ class CreateThreadForm(BaseForm, forms.ModelForm):
     def save(self):
         instance = super().save()
         instance.starred_by.add(self.request.user)
+        instance.posts.create(
+            authored_by=instance.authored_by,
+            text=self.cleaned_data["text"],
+        )
         return instance
 
 
@@ -75,12 +91,12 @@ def form_for_thread(request, *, instance=None, moderation=False):
         'request': request,
         'instance': instance,
     }
-    if moderation:
+    if instance is None:
+        return CreateThreadForm(**kw)
+    elif moderation:
         return ModerateThreadForm(**kw)
     elif instance and request.user == instance.authored_by:
         return UpdateThreadForm(**kw)
-    elif instance is None:
-        return CreateThreadForm(**kw)
     return None
 
 

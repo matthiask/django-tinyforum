@@ -1,6 +1,6 @@
 {% extends "tinyforum/base.html" %}
 
-{% load fineforms i18n %}
+{% load fineforms i18n static %}
 
 {% block extra-body-class %}forum{% endblock %}
 
@@ -23,6 +23,9 @@
 
         <form method="post">
           {% csrf_token %}
+          <script src="{% static 'webapp/lib/emojione.min.js' %}"></script>
+          <script>CKEDITOR_BASEPATH='{% static "ckeditor/ckeditor/" %}';</script>
+          {{ form.media }}
           {% ff_errors form %}
           {% ff_fields form %}
           <button type="submit">{% trans 'Submit' %}</button>
