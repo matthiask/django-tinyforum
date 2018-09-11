@@ -16,29 +16,26 @@ class BaseQuerySet(models.QuerySet):
 
 
 class BaseModel(models.Model):
-    GOOD = 'good'
-    FLAGGED = 'flagged'
-    COLLAPSED = 'collapsed'
-    HIDDEN = 'hidden'
+    GOOD = "good"
+    FLAGGED = "flagged"
+    COLLAPSED = "collapsed"
+    HIDDEN = "hidden"
 
     MODERATION_STATUS_CHOICES = (
-        (GOOD, _('good')),
-        (FLAGGED, _('flagged')),
-        (COLLAPSED, _('collapsed')),
-        (HIDDEN, _('hidden')),
+        (GOOD, _("good")),
+        (FLAGGED, _("flagged")),
+        (COLLAPSED, _("collapsed")),
+        (HIDDEN, _("hidden")),
     )
 
-    created_at = models.DateTimeField(
-        _('created at'),
-        default=timezone.now,
-    )
+    created_at = models.DateTimeField(_("created at"), default=timezone.now)
     authored_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        verbose_name=_('authored by'),
+        verbose_name=_("authored by"),
     )
     moderation_status = models.CharField(
-        _('moderation status'),
+        _("moderation status"),
         max_length=10,
         choices=MODERATION_STATUS_CHOICES,
         default=GOOD,
@@ -59,132 +56,112 @@ class ThreadQuerySet(BaseQuerySet):
 
 
 class Thread(BaseModel):
-    title = models.CharField(
-        _('title'),
-        max_length=200,
-    )
+    title = models.CharField(_("title"), max_length=200)
     is_pinned = models.BooleanField(
-        _('is pinned'),
+        _("is pinned"),
         default=False,
-        help_text=_('Pinned threads are shown at the top of the thread list.'),
+        help_text=_("Pinned threads are shown at the top of the thread list."),
     )
-    closed_at = models.DateTimeField(
-        _('closed at'),
-        blank=True,
-        null=True,
-    )
+    closed_at = models.DateTimeField(_("closed at"), blank=True, null=True)
 
     latest_post = models.OneToOneField(
-        'Post',
+        "Post",
         on_delete=models.SET_NULL,
-        related_name='+',
+        related_name="+",
         blank=True,
         null=True,
-        verbose_name=_('latest post'),
+        verbose_name=_("latest post"),
     )
-    post_count = models.IntegerField(
-        _('post count'),
-        default=0,
-    )
+    post_count = models.IntegerField(_("post count"), default=0)
     starred_by = models.ManyToManyField(
         settings.AUTH_USER_MODEL,
         blank=True,
-        related_name='starred_threads',
-        verbose_name=_('starred by'),
+        related_name="starred_threads",
+        verbose_name=_("starred by"),
     )
 
     objects = ThreadQuerySet.as_manager()
 
     class Meta:
-        ordering = ['-is_pinned', '-created_at']
-        verbose_name = _('thread')
-        verbose_name_plural = _('threads')
+        ordering = ["-is_pinned", "-created_at"]
+        verbose_name = _("thread")
+        verbose_name_plural = _("threads")
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         if self.moderation_status == self.HIDDEN:
-            return reverse('tinyforum:thread-list')
-        return reverse('tinyforum:thread-detail', kwargs={'pk': self.pk})
+            return reverse("tinyforum:thread-list")
+        return reverse("tinyforum:thread-detail", kwargs={"pk": self.pk})
 
     def save(self, *args, **kwargs):
         if self.pk:
             self.post_count = self.posts.visible().count()
             self.latest_post = self.posts.visible().last()
         super().save(*args, **kwargs)
+
     save.alters_data = True
 
 
 class Post(BaseModel):
     thread = models.ForeignKey(
-        Thread,
-        on_delete=models.CASCADE,
-        verbose_name=_('thread'),
-        related_name='posts',
+        Thread, on_delete=models.CASCADE, verbose_name=_("thread"), related_name="posts"
     )
     text = RichTextField(
-        _('text'),
-        config_name='tinyforum-post',
-        extra_plugins=['emojione'],
-        external_plugin_resources=[(
-            'emojione',
-            '/static/webapp/lib/ckeditor-emojione-1.0.1/',
-            'plugin.js',
-        )],
+        _("text"),
+        config_name="tinyforum-post",
+        extra_plugins=["emojione"],
+        external_plugin_resources=[
+            ("emojione", "/static/webapp/lib/ckeditor-emojione-1.0.1/", "plugin.js")
+        ],
     )
 
     class Meta:
-        ordering = ['created_at']
-        verbose_name = _('post')
-        verbose_name_plural = _('post')
+        ordering = ["created_at"]
+        verbose_name = _("post")
+        verbose_name_plural = _("post")
 
     def __str__(self):
-        return Truncator(strip_tags(self.text)).words(20, truncate='...')
+        return Truncator(strip_tags(self.text)).words(20, truncate="...")
 
     def save(self, *args, **kwargs):
-        self.text = get_sanitizer('tinyforum-post').sanitize(self.text)
+        self.text = get_sanitizer("tinyforum-post").sanitize(self.text)
         super().save(*args, **kwargs)
         self.thread.save()
-        self.authored_by.profile.post_count =\
+        self.authored_by.profile.post_count = (
             self.authored_by.post_set.visible().count()
+        )
         self.authored_by.profile.save()
+
     save.alters_data = True
 
 
 class Report(BaseModel):
     REASON_CHOICES = (
-        ('annoying', _("It's annoying or not interesting")),
-        ('misplaced', _("I think it shouldn't be here")),
-        ('spam', _("It's spam")),
+        ("annoying", _("It's annoying or not interesting")),
+        ("misplaced", _("I think it shouldn't be here")),
+        ("spam", _("It's spam")),
     )
 
-    reason = models.CharField(
-        _('reason'),
-        max_length=10,
-        choices=REASON_CHOICES,
-    )
+    reason = models.CharField(_("reason"), max_length=10, choices=REASON_CHOICES)
     notes = models.TextField(
-        _('notes'),
-        blank=True,
-        help_text=_('Anything else you want to say?'),
+        _("notes"), blank=True, help_text=_("Anything else you want to say?")
     )
 
-    handled_at = models.DateTimeField(
-        _('handled at'),
-        blank=True, null=True,
-    )
+    handled_at = models.DateTimeField(_("handled at"), blank=True, null=True)
     handled_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.PROTECT,
-        blank=True, null=True,
-        verbose_name=_('handled by'),
-        related_name='+',
+        blank=True,
+        null=True,
+        verbose_name=_("handled by"),
+        related_name="+",
     )
 
     # Override BaseModel.moderation_status with a blank=True version
     moderation_status = models.CharField(
-        _('moderation status'),
+        _("moderation status"),
         max_length=10,
         choices=BaseModel.MODERATION_STATUS_CHOICES,
         blank=True,
@@ -196,13 +173,10 @@ class Report(BaseModel):
 
 class PostReport(Report):
     post = models.ForeignKey(
-        Post,
-        on_delete=models.CASCADE,
-        related_name='reports',
-        verbose_name=_('post'),
+        Post, on_delete=models.CASCADE, related_name="reports", verbose_name=_("post")
     )
 
     class Meta:
-        unique_together = (('authored_by', 'post'),)
-        verbose_name = _('post report')
-        verbose_name_plural = _('post reports')
+        unique_together = (("authored_by", "post"),)
+        verbose_name = _("post report")
+        verbose_name_plural = _("post reports")
