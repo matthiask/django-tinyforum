@@ -83,7 +83,7 @@ class Thread(BaseModel):
     objects = ThreadQuerySet.as_manager()
 
     class Meta:
-        ordering = ["-is_pinned", "-created_at"]
+        ordering = ["-is_pinned", "-latest_post__created_at", "-created_at"]
         verbose_name = _("thread")
         verbose_name_plural = _("threads")
 
