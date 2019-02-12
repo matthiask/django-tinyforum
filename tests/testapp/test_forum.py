@@ -33,6 +33,8 @@ class ForumTests(TestCase):
             "/create/", {"title": "Thread title", "text": "<p>Frsit psot.</p>"}
         )
         thread = Thread.objects.get()
+        self.assertEqual(thread.posts.count(), 1)
+
         self.assertRedirects(response, thread.get_absolute_url())
         self.assertEqual(thread.authored_by, self.user1)
 
@@ -44,8 +46,13 @@ class ForumTests(TestCase):
 
         c = Client()
         c.force_login(self.user2)
+        response = c.post(thread.get_absolute_url(), {})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(thread.posts.count(), 1)
+
         response = c.post(thread.get_absolute_url(), {"text": "<p>Second!</p>"})
         self.assertRedirects(response, "%s?page=last" % thread.get_absolute_url())
+        self.assertEqual(thread.posts.count(), 2)
 
         response = c.get(thread.get_absolute_url() + "update/")
         self.assertRedirects(response, thread.get_absolute_url())
