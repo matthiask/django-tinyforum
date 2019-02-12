@@ -129,6 +129,7 @@ class Post(BaseModel):
         self.text = get_sanitizer("tinyforum-post").sanitize(self.text)
         super().save(*args, **kwargs)
         self.thread.save()
+        """
         # TODO This does not belong into the tinyforum module
         try:
             self.authored_by.profile.post_count = (
@@ -137,6 +138,7 @@ class Post(BaseModel):
             self.authored_by.profile.save()
         except models.ObjectDoesNotExist:  # Profile may not exist here.
             pass
+        """
 
     save.alters_data = True
 
