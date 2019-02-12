@@ -61,7 +61,18 @@ class ForumTests(TestCase):
 
         response = c.get("/?status=closed")
         self.assertContains(response, '<a href="/%s/?page=last">' % thread.pk)
-        self.assertContains(response, 'data-set-status="/%s/star/"' % thread.pk)
+
+    def test_thread_list(self):
+        Thread.objects.create(title="One", authored_by=self.user1)
+        Thread.objects.create(title="Two", authored_by=self.user1)
+
+        c = Client()
+        response = c.get("/")
+        self.assertContains(response, "data-set-status", 0)
+
+        c.force_login(self.user2)
+        response = c.get("/")
+        self.assertContains(response, "data-set-status", 2)
         # print(response.content.decode("utf-8"))
 
     def test_anonymous(self):
