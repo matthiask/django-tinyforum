@@ -1,7 +1,12 @@
 from django.contrib.auth.models import User
+from django.contrib.messages import get_messages
 from django.test import Client, TestCase
 
 from tinyforum.models import Thread
+
+
+def messages(response):
+    return [m.message for m in get_messages(response.wsgi_request)]
 
 
 class ForumTests(TestCase):
@@ -40,7 +45,7 @@ class ForumTests(TestCase):
 
         response = c.get(thread.get_absolute_url() + "update/")
         self.assertRedirects(response, thread.get_absolute_url())
-        # TODO check messages
+        self.assertEqual(messages(response), ["Sorry, you do not have permissions."])
 
         c = Client()
         c.force_login(self.user1)
@@ -75,6 +80,23 @@ class ForumTests(TestCase):
         self.assertContains(response, "data-set-status", 2)
         # print(response.content.decode("utf-8"))
 
+    def test_thread_update(self):
+        t = Thread.objects.create(title="One", authored_by=self.user1)
+
+        c = Client()
+        c.force_login(self.user1)
+        response = c.post(t.get_absolute_url() + "update/", {"title": "Two"})
+        self.assertRedirects(response, t.get_absolute_url())
+        self.assertEqual(messages(response), [])
+
+        t.refresh_from_db()
+        self.assertEqual(t.title, "Two")
+
+        c.force_login(self.user2)
+        response = c.post(t.get_absolute_url() + "update/", {})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(messages(response), ["Sorry, you do not have permissions."])
+
     def test_anonymous(self):
         c = Client()
         self.assertEqual(c.get("/").status_code, 200)
@@ -88,8 +110,9 @@ class ForumTests(TestCase):
     def test_user(self):
         c = Client()
         c.force_login(self.user1)
-        self.assertRedirects(c.get("/moderation/"), "/")
-        # TODO check messages
+        response = c.get("/moderation/")
+        self.assertRedirects(response, "/")
+        self.assertEqual(messages(response), ["You do not have moderation powers."])
 
     def test_moderator(self):
         c = Client()
