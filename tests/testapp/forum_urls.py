@@ -43,9 +43,7 @@ urlpatterns = [
         login_required(moderation(views.thread_form)),
         name="thread-update",
     ),
-    url(
-        r"^(?P<pk>[0-9]+)/star/$", login_required(views.thread_star), name="thread-star"
-    ),
+    url(r"^(?P<pk>[0-9]+)/star/$", views.thread_star, name="thread-star"),
     url(
         r"^post/(?P<pk>[0-9]+)/update/$",
         login_required(moderation(views.post_form)),

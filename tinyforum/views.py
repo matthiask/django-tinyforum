@@ -77,6 +77,9 @@ def thread_form(request, *, pk=None, moderation=False):
 
 
 def thread_star(request, pk):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "not authenticated"}, status=403)
+
     instance = get_object_or_404(Thread, pk=pk)
     status = bool(int(request.GET.get("status")))
 

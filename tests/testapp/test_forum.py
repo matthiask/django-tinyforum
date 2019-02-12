@@ -6,7 +6,7 @@ from django.test import Client, TestCase
 from django.urls import reverse
 
 from tinyforum.forms import form_for_thread, form_for_post
-from tinyforum.models import Post, Thread
+from tinyforum.models import Post, PostReport, Thread
 
 
 def messages(response):
@@ -150,7 +150,7 @@ class ForumTests(TestCase):
         t = Thread.objects.create(title="Test", authored_by=self.user1)
         self.assertEqual(c.get(t.get_absolute_url()).status_code, 200)
         self.assertEqual(c.get(t.get_absolute_url() + "update/").status_code, 302)
-        self.assertEqual(c.get(t.get_absolute_url() + "star/").status_code, 302)
+        self.assertEqual(c.get(t.get_absolute_url() + "star/").status_code, 403)
 
     def test_user(self):
         c = Client()
@@ -169,3 +169,73 @@ class ForumTests(TestCase):
 
         self.assertEqual(form_for_thread(request), None)
         self.assertEqual(form_for_post(request, thread=42), None)
+
+    def test_post_report(self):
+        t = Thread.objects.create(title="One", authored_by=self.user1)
+        p = Post.objects.create(thread=t, text="One text", authored_by=self.user1)
+        p_report_url = reverse("tinyforum:post-report", kwargs={"pk": p.pk})
+
+        c = Client()
+        c.force_login(self.user2)
+
+        response = c.get(p_report_url)
+        self.assertContains(response, 'id="id_reason_0"')
+        self.assertContains(response, 'id="id_notes"')
+
+        response = c.post(p_report_url, {})
+        self.assertEqual(response.status_code, 200)
+
+        response = c.post(p_report_url, {"reason": "spam", "notes": "stuff"})
+        self.assertRedirects(response, t.get_absolute_url())
+        self.assertEqual(
+            messages(response),
+            [
+                "Thank you for the report. A community moderator will"
+                " deal with it as soon as possible!"
+            ],
+        )
+
+        response = c.get(p_report_url)
+        self.assertRedirects(response, t.get_absolute_url())
+        self.assertEqual(messages(response), ["You already reported this post."])
+
+        c = Client()
+        c.force_login(self.admin)
+
+        response = c.get("/moderation/")
+        self.assertContains(response, "It&#39;s spam", 1)
+
+        r = PostReport.objects.get()
+        r_handle_url = reverse("tinyforum:report-handle", kwargs={"pk": r.pk})
+
+        response = c.get(r_handle_url)
+        self.assertContains(response, 'id="id_moderation_status_0"')
+
+        response = c.post(r_handle_url, {})
+        self.assertEqual(response.status_code, 200)
+
+        response = c.post(r_handle_url, {"moderation_status": "flagged"})
+        self.assertRedirects(response, "/moderation/")
+
+        p.refresh_from_db()
+        self.assertEqual(p.moderation_status, "flagged")
+
+    def test_thread_star(self):
+        t = Thread.objects.create(title="One", authored_by=self.user1)
+        t_star_url = reverse("tinyforum:thread-star", kwargs={"pk": t.pk})
+
+        self.assertEqual(t.starred_by.count(), 0)
+
+        c = Client()
+        response = c.get(t_star_url)
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(t.starred_by.count(), 0)
+
+        c.force_login(self.user2)
+        response = c.get(t_star_url + "?status=1")
+        self.assertContains(response, '"status": 1')
+        self.assertEqual(t.starred_by.count(), 1)
+
+        response = c.get(t_star_url + "?status=0")
+        self.assertContains(response, '"status": 0')
+        self.assertEqual(t.starred_by.count(), 0)
