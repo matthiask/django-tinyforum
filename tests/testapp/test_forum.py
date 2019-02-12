@@ -59,6 +59,11 @@ class ForumTests(TestCase):
         response = c.get(thread.get_absolute_url() + "update/")
         self.assertNotContains(response, 'for="id_close_thread"')
 
+        response = c.get("/?status=closed")
+        self.assertContains(response, '<a href="/%s/?page=last">' % thread.pk)
+        self.assertContains(response, 'data-set-status="/%s/star/"' % thread.pk)
+        # print(response.content.decode("utf-8"))
+
     def test_anonymous(self):
         c = Client()
         self.assertEqual(c.get("/").status_code, 200)
