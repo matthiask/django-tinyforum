@@ -74,7 +74,7 @@ class UpdateThreadForm(BaseForm, forms.ModelForm):
 class ModerateThreadForm(UpdateThreadForm, forms.ModelForm):
     moderation_status = forms.ChoiceField(
         label=capfirst(_("moderation status")),
-        choices=PostReport.MODERATION_STATUS_CHOICES,
+        choices=Thread.MODERATION_STATUS_CHOICES,
         widget=forms.RadioSelect,
     )
 
