@@ -1,0 +1,6 @@
+include LICENSE
+include MANIFEST.in
+include README.rst
+recursive-include tinyforum/static *
+recursive-include tinyforum/locale *
+recursive-include tinyforum/templates *
