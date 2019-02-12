@@ -14,9 +14,7 @@ from tinyforum.utils import paginate_list, render_detail, render_list
 
 
 def thread_list(request):
-    queryset = Thread.objects.select_related(
-        "authored_by__profile", "latest_post__authored_by__profile"
-    )
+    queryset = Thread.objects.select_related("authored_by", "latest_post__authored_by")
 
     if request.GET.get("status") == "closed":
         queryset = queryset.closed()
@@ -38,7 +36,7 @@ def post_list(request, pk):
 
     posts = paginate_list(
         request,
-        thread.posts.visible().select_related("authored_by__profile"),
+        thread.posts.visible().select_related("authored_by"),
         paginate_by=20,
         orphans=5,
     )
@@ -152,7 +150,7 @@ def report_list(request):
         PostReport.objects.filter(handled_at__isnull=True)
         .exclude(authored_by=request.user)
         .order_by("created_at")
-        .select_related("post__authored_by__profile", "authored_by__profile"),
+        .select_related("post__authored_by", "authored_by"),
     )
 
 
