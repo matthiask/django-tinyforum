@@ -3,9 +3,10 @@ from types import SimpleNamespace
 from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.messages import get_messages
 from django.test import Client, TestCase
+from django.urls import reverse
 
 from tinyforum.forms import form_for_thread, form_for_post
-from tinyforum.models import Thread
+from tinyforum.models import Post, Thread
 
 
 def messages(response):
@@ -111,6 +112,34 @@ class ForumTests(TestCase):
         self.assertContains(response, 'id="id_title"')
         self.assertContains(response, 'id="id_close_thread"')
         self.assertContains(response, 'id="id_is_pinned"')
+        self.assertContains(response, 'id="id_moderation_status"')
+
+    def test_post_update(self):
+        t = Thread.objects.create(title="One", authored_by=self.user1)
+        p = Post.objects.create(thread=t, text="One text", authored_by=self.user1)
+        p_update_url = reverse("tinyforum:post-update", kwargs={"pk": p.pk})
+
+        c = Client()
+        c.force_login(self.user1)
+        response = c.get(p_update_url)
+        self.assertContains(response, 'id="id_text"')
+        self.assertNotContains(response, 'id="id_moderation_status"')
+
+        response = c.post(p_update_url, {"text": "Two text"})
+        self.assertRedirects(response, t.get_absolute_url())
+        self.assertEqual(messages(response), [])
+
+        p.refresh_from_db()
+        self.assertEqual(p.text, "Two text")
+
+        c.force_login(self.user2)
+        response = c.post(p_update_url, {})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(messages(response), ["Sorry, you do not have permissions."])
+
+        c.force_login(self.admin)
+        response = c.get(p_update_url)
+        self.assertContains(response, 'id="id_text"')
         self.assertContains(response, 'id="id_moderation_status"')
 
     def test_anonymous(self):
