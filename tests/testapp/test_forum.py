@@ -14,7 +14,7 @@ class ForumTests(TestCase):
         cls.user1 = User.objects.create_user("user1", "user1@example.com", "password")
         cls.user2 = User.objects.create_user("user2", "user2@example.com", "password")
 
-    def test_thread_list(self):
+    def test_posting_a_bit(self):
         c = Client()
         c.force_login(self.user1)
         response = c.get("/")
@@ -25,7 +25,36 @@ class ForumTests(TestCase):
         )
         thread = Thread.objects.get()
         self.assertRedirects(response, thread.get_absolute_url())
+        self.assertEqual(thread.authored_by, self.user1)
 
         response = c.get(thread.get_absolute_url())
-        print(response.content.decode("utf-8"))
         self.assertContains(response, "Frsit psot.")
+
+        response = c.get(thread.get_absolute_url() + "update/")
+        self.assertEqual(response.status_code, 200)
+
+        c = Client()
+        c.force_login(self.user2)
+        response = c.post(thread.get_absolute_url(), {"text": "<p>Second!</p>"})
+        self.assertRedirects(response, "%s?page=last" % thread.get_absolute_url())
+
+        response = c.get(thread.get_absolute_url() + "update/")
+        self.assertRedirects(response, thread.get_absolute_url())
+        # TODO check messages
+
+        c = Client()
+        c.force_login(self.user1)
+        response = c.get(thread.get_absolute_url() + "update/")
+        self.assertContains(response, 'for="id_close_thread"')
+
+        response = c.post(
+            thread.get_absolute_url() + "update/",
+            {"title": thread.title, "close_thread": True},
+        )
+        self.assertRedirects(response, thread.get_absolute_url())
+
+        thread.refresh_from_db()
+        self.assertFalse(thread.closed_at is None)
+
+        response = c.get(thread.get_absolute_url() + "update/")
+        self.assertNotContains(response, 'for="id_close_thread"')
