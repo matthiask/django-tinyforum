@@ -1,7 +1,9 @@
 from functools import wraps
 
 from django.conf.urls import url
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
 # from community.decorators import (
 #     profile_required,
@@ -13,7 +15,17 @@ from tinyforum import views
 
 profile_required = login_required
 profile_required_if_authenticated = login_required
-moderator_required = login_required
+
+
+def moderator_required(fn):
+    @login_required
+    def view(request, *args, **kwargs):
+        if not request.user.is_staff:
+            messages.error(request, "You do not have moderation powers.")
+            return redirect("tinyforum:thread-list")
+        return fn(request, *args, **kwargs)
+
+    return view
 
 
 def moderation(fn):

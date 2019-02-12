@@ -58,3 +58,25 @@ class ForumTests(TestCase):
 
         response = c.get(thread.get_absolute_url() + "update/")
         self.assertNotContains(response, 'for="id_close_thread"')
+
+    def test_anonymous(self):
+        c = Client()
+        # FIXME viewing should maybe be allowed
+        self.assertRedirects(c.get("/"), "/accounts/login/?next=/")
+        self.assertRedirects(c.get("/create/"), "/accounts/login/?next=/create/")
+
+        t = Thread.objects.create(title="Test", authored_by=self.user1)
+        self.assertEqual(c.get(t.get_absolute_url()).status_code, 302)
+        self.assertEqual(c.get(t.get_absolute_url() + "update/").status_code, 302)
+        self.assertEqual(c.get(t.get_absolute_url() + "star/").status_code, 302)
+
+    def test_user(self):
+        c = Client()
+        c.force_login(self.user1)
+        self.assertRedirects(c.get("/moderation/"), "/")
+        # TODO check messages
+
+    def test_moderator(self):
+        c = Client()
+        c.force_login(self.admin)
+        self.assertEqual(c.get("/moderation/").status_code, 200)
