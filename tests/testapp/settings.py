@@ -8,9 +8,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.staticfiles",
     "django.contrib.messages",
+    "django.contrib.admin",
+    "ckeditor",
+    "fineforms",
     "testapp",
     "tinyforum",
-    "django.contrib.admin",
 ]
 
 MEDIA_ROOT = "/media/"
@@ -50,3 +52,16 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+HTML_SANITIZERS = {
+    "tinyforum-post": {
+        "tags": {"a", "strong", "em", "p", "br", "blockquote"},
+        "attributes": {"a": ("href", "name", "target", "title", "id", "rel")},
+        "empty": {"a", "br"},
+        "separate": {"a", "p"},
+        "add_nofollow": True,
+        "autolink": True,
+        # 'element_filters': [],
+        # 'sanitize_href': sanitize_href,
+    }
+}

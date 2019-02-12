@@ -19,7 +19,8 @@ moderator_required = login_required
 def moderation(fn):
     @wraps(fn)
     def dec(request, *args, **kwargs):
-        kwargs["moderation"] = request.user.profile.has_moderation_powers
+        # kwargs["moderation"] = request.user.profile.has_moderation_powers
+        kwargs["moderation"] = request.user.is_staff
         return fn(request, *args, **kwargs)
 
     return dec
