@@ -1,7 +1,10 @@
-from django.contrib.auth.models import User
+from types import SimpleNamespace
+
+from django.contrib.auth.models import AnonymousUser, User
 from django.contrib.messages import get_messages
 from django.test import Client, TestCase
 
+from tinyforum.forms import form_for_thread, form_for_post
 from tinyforum.models import Thread
 
 
@@ -131,3 +134,9 @@ class ForumTests(TestCase):
         c = Client()
         c.force_login(self.admin)
         self.assertEqual(c.get("/moderation/").status_code, 200)
+
+    def test_form_functions(self):
+        request = SimpleNamespace(method="GET", user=AnonymousUser())
+
+        self.assertEqual(form_for_thread(request), None)
+        self.assertEqual(form_for_post(request, thread=42), None)
