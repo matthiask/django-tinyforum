@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>{% block title %}testapp{% endblock %}</title>
+</head>
+<body>
+  {% if messages %}
+  <ul class="messages">
+      {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% block lead-title %}{% endblock %}
+
+  {% block before-content %}
+  <div class="row">
+    <div class="small-12 columns">
+      {% if request.user.is_authenticated %}
+      <nav style="float:right">
+        <a href="{% url 'tinyforum:thread-list' %}">Forum</a>
+        <a href="{% url 'tinyforum:report-list' %}">Moderation</a>
+        {# <a href="{% url 'logout' %}">Abmelden</a> #}
+      </nav>
+      {% endif %}
+    </div>
+  </div>
+  {% endblock %}
+
+  {% block content %}
+    {% block main-region-content %}
+    {% endblock %}
+  {% endblock %}
+</body>
+</html>
