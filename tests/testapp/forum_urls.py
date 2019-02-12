@@ -5,16 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 
-# from community.decorators import (
-#     profile_required,
-#     profile_required_if_authenticated,
-#     moderator_required,
-# )
 from tinyforum import views
-
-
-profile_required = login_required
-profile_required_if_authenticated = login_required
 
 
 def moderator_required(fn):
@@ -40,37 +31,29 @@ def moderation(fn):
 
 app_name = "tinyforum"
 urlpatterns = [
-    url(
-        r"^$", profile_required_if_authenticated(views.thread_list), name="thread-list"
-    ),
+    url(r"^$", views.thread_list, name="thread-list"),
     url(
         r"^create/$",
-        profile_required(moderation(views.thread_form)),
+        login_required(moderation(views.thread_form)),
         name="thread-create",
     ),
-    url(
-        r"^(?P<pk>[0-9]+)/$",
-        profile_required_if_authenticated(views.post_list),
-        name="thread-detail",
-    ),
+    url(r"^(?P<pk>[0-9]+)/$", views.post_list, name="thread-detail"),
     url(
         r"^(?P<pk>[0-9]+)/update/$",
-        profile_required(moderation(views.thread_form)),
+        login_required(moderation(views.thread_form)),
         name="thread-update",
     ),
     url(
-        r"^(?P<pk>[0-9]+)/star/$",
-        profile_required(views.thread_star),
-        name="thread-star",
+        r"^(?P<pk>[0-9]+)/star/$", login_required(views.thread_star), name="thread-star"
     ),
     url(
         r"^post/(?P<pk>[0-9]+)/update/$",
-        profile_required(moderation(views.post_form)),
+        login_required(moderation(views.post_form)),
         name="post-update",
     ),
     url(
         r"^post/(?P<pk>[0-9]+)/report/$",
-        profile_required(views.post_report),
+        login_required(views.post_report),
         name="post-report",
     ),
     url(r"^moderation/$", moderator_required(views.report_list), name="report-list"),

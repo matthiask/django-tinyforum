@@ -89,7 +89,9 @@ def form_for_thread(request, *, instance=None, moderation=False):
         "request": request,
         "instance": instance,
     }
-    if instance is None:
+    if not request.user.is_authenticated:
+        return None
+    elif instance is None:
         return CreateThreadForm(**kw)
     elif moderation:
         return ModerateThreadForm(**kw)
@@ -150,7 +152,9 @@ def form_for_post(request, *, thread, instance=None, moderation=False):
         "instance": instance,
         "thread": thread,
     }
-    if thread.closed_at:
+    if not request.user.is_authenticated:
+        return None
+    elif thread.closed_at:
         return None
     elif moderation:
         return ModeratePostForm(**kw)

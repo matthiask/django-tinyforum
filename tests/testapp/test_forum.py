@@ -61,12 +61,11 @@ class ForumTests(TestCase):
 
     def test_anonymous(self):
         c = Client()
-        # FIXME viewing should maybe be allowed
-        self.assertRedirects(c.get("/"), "/accounts/login/?next=/")
+        self.assertEqual(c.get("/").status_code, 200)
         self.assertRedirects(c.get("/create/"), "/accounts/login/?next=/create/")
 
         t = Thread.objects.create(title="Test", authored_by=self.user1)
-        self.assertEqual(c.get(t.get_absolute_url()).status_code, 302)
+        self.assertEqual(c.get(t.get_absolute_url()).status_code, 200)
         self.assertEqual(c.get(t.get_absolute_url() + "update/").status_code, 302)
         self.assertEqual(c.get(t.get_absolute_url() + "star/").status_code, 302)
 
