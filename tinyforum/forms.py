@@ -18,8 +18,9 @@ class BaseForm(forms.Form):
         instance = super().save(commit=False)
         if not instance.authored_by_id:
             instance.authored_by = self.request.user
-        if commit:
+        if commit:  # pragma: no branch
             instance.save()
+            self.save_m2m()
         return instance
 
 
@@ -109,8 +110,9 @@ class BasePostForm(BaseForm):
         instance = super().save(commit=False)
         if not instance.thread_id:
             instance.thread = self.thread
-        if commit:
+        if commit:  # pragma: no branch
             instance.save()
+            self.save_m2m()
         return instance
 
 
