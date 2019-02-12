@@ -1,6 +1,6 @@
 # Copied from feincms3/shortcuts.py
 
-from django.core import paginator
+from django.core.paginator import Paginator
 from django.shortcuts import render
 
 
@@ -19,17 +19,9 @@ def paginate_list(request, iterable, paginate_by=None, orphans=0):
     if not paginate_by:
         return iterable
 
-    p = paginator.Paginator(iterable, paginate_by)
+    p = Paginator(iterable, paginate_by, orphans=orphans)
     page = request.GET.get("page")
-    if page == "last":
-        return p.page(p.num_pages)
-
-    try:
-        return p.page(request.GET.get("page"))
-    except paginator.PageNotAnInteger:
-        return p.page(1)
-    except paginator.EmptyPage:
-        return p.page(p.num_pages)
+    return p.get_page(p.num_pages if page == "last" else page)
 
 
 def render_list(
@@ -42,17 +34,9 @@ def render_list(
     orphans=0
 ):
     context = context or {}
-    if paginate_by:
-        p = paginator.Paginator(queryset, paginate_by)
-        try:
-            object_list = p.page(request.GET.get("page"))
-        except paginator.PageNotAnInteger:
-            object_list = p.page(1)
-        except paginator.EmptyPage:
-            object_list = p.page(p.num_pages)
-    else:
-        object_list = queryset
-
+    object_list = paginate_list(
+        request, queryset, paginate_by=paginate_by, orphans=orphans
+    )
     context.update(
         {
             "object_list": object_list,

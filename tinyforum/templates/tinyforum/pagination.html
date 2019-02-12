@@ -12,9 +12,9 @@
       {% for p in object_list.paginator.page_range %}
 
         {% if forloop.first and not p == object_list.number %}
-          <a href="{% pagination_link p %}">{{ p }}</a>
+          <a href="{% pagination_link page=p %}">{{ p }}</a>
         {% elif forloop.last and not p == object_list.number %}
-          <a href="{% pagination_link p %}">{{ p }}</a>
+          <a href="{% pagination_link page=p %}">{{ p }}</a>
         {% elif p <= object_list.number|add:3 and p >= object_list.number|add:-3 %}
 
           {% if p == object_list.number|add:-3 %}
@@ -22,9 +22,9 @@
           {% endif %}
 
           {% ifequal p object_list.number %}
-            <a class="mark" aria-label="{% trans 'Current page' %}" href="{% pagination_link p %}">{{ p }}</a>
+            <a class="mark" aria-label="{% trans 'Current page' %}" href="{% pagination_link page=p %}">{{ p }}</a>
           {% else %}
-            <a href="{% pagination_link p %}">{{ p }}</a>
+            <a href="{% pagination_link page=p %}">{{ p }}</a>
           {% endifequal %}
 
           {% if p == object_list.number|add:3 %}

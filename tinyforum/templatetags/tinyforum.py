@@ -24,6 +24,6 @@ def thread_star(context, thread):
 
 
 @register.simple_tag(takes_context=True)
-def pagination_link(context, page):
-    query = urlencode(sorted(dict(context["request"].GET.items(), page=page).items()))
+def pagination_link(context, **kwargs):
+    query = urlencode(sorted(dict(context["request"].GET.items(), **kwargs).items()))
     return "?%s" % query if query else "."
