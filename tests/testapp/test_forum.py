@@ -85,6 +85,12 @@ class ForumTests(TestCase):
 
         c = Client()
         c.force_login(self.user1)
+        response = c.get(t.get_absolute_url() + "update/")
+        self.assertContains(response, 'id="id_title"')
+        self.assertContains(response, 'id="id_close_thread"')
+        self.assertNotContains(response, 'id="id_is_pinned"')
+        self.assertNotContains(response, 'id="id_moderation_status"')
+
         response = c.post(t.get_absolute_url() + "update/", {"title": "Two"})
         self.assertRedirects(response, t.get_absolute_url())
         self.assertEqual(messages(response), [])
@@ -96,6 +102,13 @@ class ForumTests(TestCase):
         response = c.post(t.get_absolute_url() + "update/", {})
         self.assertEqual(response.status_code, 302)
         self.assertEqual(messages(response), ["Sorry, you do not have permissions."])
+
+        c.force_login(self.admin)
+        response = c.get(t.get_absolute_url() + "update/")
+        self.assertContains(response, 'id="id_title"')
+        self.assertContains(response, 'id="id_close_thread"')
+        self.assertContains(response, 'id="id_is_pinned"')
+        self.assertContains(response, 'id="id_moderation_status"')
 
     def test_anonymous(self):
         c = Client()
