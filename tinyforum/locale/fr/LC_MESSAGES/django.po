@@ -1,0 +1,349 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-02-12 17:04+0100\n"
+"PO-Revision-Date: 2014-03-13 17:37+0100\n"
+"Last-Translator:   <>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Translated-Using: django-rosetta 0.7.3\n"
+
+#: forms.py:28 models.py:112
+msgid "text"
+msgstr "text"
+
+#: forms.py:58
+msgid "Close thread"
+msgstr "Clore ce fil de discussion."
+
+#: forms.py:61
+msgid "The thread will still be visible, but no posts can be added to it."
+msgstr ""
+"Ce fil de discussion reste visible, mail il n'est plus possbile d'ajouter "
+"des interventions."
+
+#: forms.py:76 forms.py:136 forms.py:189 models.py:38 models.py:168
+msgid "moderation status"
+msgstr "état de modération"
+
+#: forms.py:166 models.py:151
+msgid "reason"
+msgstr "raison"
+
+#: models.py:25
+msgid "good"
+msgstr "bien"
+
+#: models.py:26
+msgid "flagged"
+msgstr "signalé"
+
+#: models.py:27
+msgid "collapsed"
+msgstr "s'est effondré"
+
+#: models.py:28
+msgid "hidden"
+msgstr "caché"
+
+#: models.py:31
+msgid "created at"
+msgstr "créé le"
+
+#: models.py:35
+msgid "authored by"
+msgstr "créé par"
+
+#: models.py:59
+msgid "title"
+msgstr "Titre"
+
+#: models.py:61
+msgid "is pinned"
+msgstr ""
+
+#: models.py:63
+msgid "Pinned threads are shown at the top of the thread list."
+msgstr "Fils fixés sont montrés en tête de liste."
+
+#: models.py:65
+msgid "closed at"
+msgstr "Clos le"
+
+#: models.py:73
+msgid "latest post"
+msgstr "dernière intervention"
+
+#: models.py:75
+msgid "post count"
+msgstr "nombre d'interventions"
+
+#: models.py:80
+msgid "starred by"
+msgstr ""
+
+#: models.py:87 models.py:109
+msgid "thread"
+msgstr "fil de discussion"
+
+#: models.py:88
+msgid "threads"
+msgstr "Fils de discussion"
+
+#: models.py:122 models.py:123 models.py:180
+msgid "post"
+msgstr "Intervention"
+
+#: models.py:146
+msgid "It's annoying or not interesting"
+msgstr "C'est ennuyeux ou pas intéressant"
+
+#: models.py:147
+msgid "I think it shouldn't be here"
+msgstr "Je pense que ça ne devrait pas être ici"
+
+#: models.py:148
+msgid "It's spam"
+msgstr "ses spam"
+
+#: models.py:153
+msgid "notes"
+msgstr "notes"
+
+#: models.py:153
+msgid "Anything else you want to say?"
+msgstr "Y'a rien d'autre que tu veuilles dire ?"
+
+#: models.py:156
+msgid "handled at"
+msgstr "traité le"
+
+#: models.py:162
+msgid "handled by"
+msgstr "traité par"
+
+#: models.py:185
+msgid "post report"
+msgstr "rédiggent rapport"
+
+#: models.py:186
+msgid "post reports"
+msgstr "rédiggent rapports"
+
+#: templates/tinyforum/pagination.html:25
+msgid "Current page"
+msgstr "page actuelle"
+
+#: templates/tinyforum/post_form.html:8 templates/tinyforum/post_list.html:73
+msgid "Edit post"
+msgstr "Éditer"
+
+#: templates/tinyforum/post_form.html:33 templates/tinyforum/post_list.html:112
+#: templates/tinyforum/report_form.html:22
+#: templates/tinyforum/thread_form.html:31
+msgid "Submit"
+msgstr "Sauvegarder"
+
+#: templates/tinyforum/post_list.html:7 templates/tinyforum/thread_list.html:7
+msgid "Forum"
+msgstr "Forum"
+
+#: templates/tinyforum/post_list.html:17
+msgid "Back to thread list"
+msgstr "retour au sommaire"
+
+#: templates/tinyforum/post_list.html:20 templates/tinyforum/thread_form.html:9
+msgid "Update thread"
+msgstr "mettre le fil à jour"
+
+#: templates/tinyforum/post_list.html:25
+#: templates/tinyforum/thread_list.html:32
+msgid "Author"
+msgstr "Auteur"
+
+#: templates/tinyforum/post_list.html:26
+msgid "Message"
+msgstr "message"
+
+#: templates/tinyforum/post_list.html:35
+msgid "Post by"
+msgstr "intervention par"
+
+#: templates/tinyforum/post_list.html:36
+msgid "Created at"
+msgstr "créé le"
+
+#: templates/tinyforum/post_list.html:42
+msgid "Creator of the thread"
+msgstr "Auteur du fil de discussion"
+
+#: templates/tinyforum/post_list.html:45
+msgid "Staff"
+msgstr "Collaborateur"
+
+#: templates/tinyforum/post_list.html:48
+msgid "Joined at: "
+msgstr "Inscrit depuis: "
+
+#: templates/tinyforum/post_list.html:49
+msgid "Posts: "
+msgstr "Interventions: "
+
+#: templates/tinyforum/post_list.html:54 templates/tinyforum/post_list.html:60
+msgid "Show post"
+msgstr "Montrer l'intervention"
+
+#: templates/tinyforum/post_list.html:54
+msgid "Hide post"
+msgstr "Cacher intervention"
+
+#: templates/tinyforum/post_list.html:56
+msgid ""
+"\n"
+"                    This post has been collapsed by a moderator.\n"
+"                  "
+msgstr ""
+"\n"
+"                    Ce message a été effondré par un modérateur.\n"
+"                  "
+
+#: templates/tinyforum/post_list.html:75 templates/tinyforum/report_form.html:8
+msgid "Report post"
+msgstr "signaler rapport"
+
+#: templates/tinyforum/post_list.html:78
+msgid "This post has been reported."
+msgstr "Ce poste a été rapporté."
+
+#: templates/tinyforum/post_list.html:88
+msgid ""
+"\n"
+"                This thread is empty. Be the first one who posts something "
+"about this topic.\n"
+"              "
+msgstr ""
+"\n"
+"                Ce fil est vide. Soyez le premier à posté quelque choseà "
+"propos de ce sujet. about this topic.\n"
+"              "
+
+#: templates/tinyforum/post_list.html:101
+msgid "Write a post"
+msgstr "écrire une intervention"
+
+#: templates/tinyforum/post_list.html:117
+msgid "This thread is closed."
+msgstr "Ce fil de discussion est clos."
+
+#: templates/tinyforum/postreport_list.html:8
+msgid "Moderation"
+msgstr "modération"
+
+#: templates/tinyforum/postreport_list.html:22
+msgid "Report by"
+msgstr "Rapport par"
+
+#: templates/tinyforum/postreport_list.html:22
+#: templates/tinyforum/postreport_list.html:33
+msgid "at"
+msgstr "à"
+
+#: templates/tinyforum/postreport_list.html:23
+msgid "Reason"
+msgstr "raison"
+
+#: templates/tinyforum/postreport_list.html:27
+msgid "Notes"
+msgstr "notes"
+
+#: templates/tinyforum/postreport_list.html:32
+msgid "Post"
+msgstr "Intervention"
+
+#: templates/tinyforum/postreport_list.html:33
+msgid "By"
+msgstr "de"
+
+#: templates/tinyforum/postreport_list.html:33
+msgid "in"
+msgstr "dans"
+
+#: templates/tinyforum/postreport_list.html:44
+msgid "Yay, all reports have been handled!"
+msgstr "tous les rapports ont été traités"
+
+#: templates/tinyforum/postreport_list.html:46
+msgid "Note! Your own reports, if there are any, are not visisble to you."
+msgstr ""
+"Attention! Vos propres messages, le cas échéant, ne sont pas visibles pour "
+"vous."
+
+#: templates/tinyforum/thread_form.html:11
+msgid "Create thread"
+msgstr "lancer un fil"
+
+#: templates/tinyforum/thread_list.html:13
+msgid "Create new thread"
+msgstr "Lancer un nouveau fil"
+
+#: templates/tinyforum/thread_list.html:15
+msgid "Login"
+msgstr "s'identifier"
+
+#: templates/tinyforum/thread_list.html:19
+msgid "Status"
+msgstr "Status"
+
+#: templates/tinyforum/thread_list.html:20
+msgid "Active"
+msgstr "Active"
+
+#: templates/tinyforum/thread_list.html:21
+msgid "Closed"
+msgstr "Clos"
+
+#: templates/tinyforum/thread_list.html:30
+msgid "Thread"
+msgstr "Fil de discussion"
+
+#: templates/tinyforum/thread_list.html:31
+msgid "Posts"
+msgstr "Interventions"
+
+#: templates/tinyforum/thread_list.html:33
+msgid "Latest post"
+msgstr "Dernier interventions"
+
+#: templates/tinyforum/thread_list.html:41
+msgid "Pinned"
+msgstr ""
+
+#: templates/tinyforum/thread_star.html:10
+msgid "Mark this thread"
+msgstr "Marquer ce sujet."
+
+#: views.py:65 views.py:104
+msgid "Sorry, you do not have permissions."
+msgstr "Pardon, vous n'avez pas d'autorisations."
+
+#: views.py:125
+msgid "You already reported this post."
+msgstr "Vous avez déjà signalé ce post"
+
+#: views.py:136
+msgid ""
+"Thank you for the report. A community moderator will deal with it as soon as "
+"possible!"
+msgstr ""
+"Merci pour le rapport. Un modérateur traitera avec va s'en dès que possible."

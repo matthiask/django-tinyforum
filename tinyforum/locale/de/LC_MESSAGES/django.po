@@ -1,0 +1,349 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-02-12 17:04+0100\n"
+"PO-Revision-Date: 2017-12-06 11:36+0030\n"
+"Last-Translator: b'Anonymous User <dev@feinheit.ch>'\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Translated-Using: django-rosetta 0.7.13\n"
+
+#: forms.py:28 models.py:112
+msgid "text"
+msgstr "Text"
+
+#: forms.py:58
+msgid "Close thread"
+msgstr "Thema schliessen"
+
+#: forms.py:61
+msgid "The thread will still be visible, but no posts can be added to it."
+msgstr ""
+"Das Thema bleibt sichtbar, aber keine Beiträge können dazu erfasst werden."
+
+#: forms.py:76 forms.py:136 forms.py:189 models.py:38 models.py:168
+msgid "moderation status"
+msgstr "Moderationsstatus"
+
+#: forms.py:166 models.py:151
+msgid "reason"
+msgstr "Grund"
+
+#: models.py:25
+msgid "good"
+msgstr "Gut"
+
+#: models.py:26
+msgid "flagged"
+msgstr "Markiert"
+
+#: models.py:27
+msgid "collapsed"
+msgstr "zusammengefasst"
+
+#: models.py:28
+msgid "hidden"
+msgstr "versteckt"
+
+#: models.py:31
+msgid "created at"
+msgstr "erstellt um"
+
+#: models.py:35
+msgid "authored by"
+msgstr "erstellt von"
+
+#: models.py:59
+msgid "title"
+msgstr "Titel"
+
+#: models.py:61
+msgid "is pinned"
+msgstr "ist angeheftet"
+
+#: models.py:63
+msgid "Pinned threads are shown at the top of the thread list."
+msgstr "Angeheftete Themen werden zuoberst in der Themenliste angezeigt."
+
+#: models.py:65
+msgid "closed at"
+msgstr "Geschlossen um"
+
+#: models.py:73
+msgid "latest post"
+msgstr "Letzter Beitrag"
+
+#: models.py:75
+msgid "post count"
+msgstr "Anzahl Beiträge"
+
+#: models.py:80
+msgid "starred by"
+msgstr "Markiert von"
+
+#: models.py:87 models.py:109
+msgid "thread"
+msgstr "Thema"
+
+#: models.py:88
+msgid "threads"
+msgstr "Themen"
+
+#: models.py:122 models.py:123 models.py:180
+msgid "post"
+msgstr ""
+
+#: models.py:146
+msgid "It's annoying or not interesting"
+msgstr "Es ist störend oder nicht von allgemeinem Interesse"
+
+#: models.py:147
+msgid "I think it shouldn't be here"
+msgstr "Ich denke es sollte nicht hier sein"
+
+#: models.py:148
+msgid "It's spam"
+msgstr "Es ist unerwünschte Werbung"
+
+#: models.py:153
+msgid "notes"
+msgstr "Anmerkungen"
+
+#: models.py:153
+msgid "Anything else you want to say?"
+msgstr "Möchten Sie uns noch mehr mitteilen?"
+
+#: models.py:156
+msgid "handled at"
+msgstr "Bearbeitet um"
+
+#: models.py:162
+msgid "handled by"
+msgstr "Bearbeitet von"
+
+#: models.py:185
+msgid "post report"
+msgstr "Beitragsmeldung"
+
+#: models.py:186
+msgid "post reports"
+msgstr "Beitragsmeldungen"
+
+#: templates/tinyforum/pagination.html:25
+msgid "Current page"
+msgstr "Aktuelle Seite"
+
+#: templates/tinyforum/post_form.html:8 templates/tinyforum/post_list.html:73
+msgid "Edit post"
+msgstr "Beitrag ändern"
+
+#: templates/tinyforum/post_form.html:33 templates/tinyforum/post_list.html:112
+#: templates/tinyforum/report_form.html:22
+#: templates/tinyforum/thread_form.html:31
+msgid "Submit"
+msgstr "Absenden"
+
+#: templates/tinyforum/post_list.html:7 templates/tinyforum/thread_list.html:7
+msgid "Forum"
+msgstr "Forum"
+
+#: templates/tinyforum/post_list.html:17
+msgid "Back to thread list"
+msgstr "Zurück zur Themenliste"
+
+#: templates/tinyforum/post_list.html:20 templates/tinyforum/thread_form.html:9
+msgid "Update thread"
+msgstr "Thema aktualisieren"
+
+#: templates/tinyforum/post_list.html:25
+#: templates/tinyforum/thread_list.html:32
+msgid "Author"
+msgstr "Autor"
+
+#: templates/tinyforum/post_list.html:26
+msgid "Message"
+msgstr "Nachricht"
+
+#: templates/tinyforum/post_list.html:35
+msgid "Post by"
+msgstr "Beitrag von"
+
+#: templates/tinyforum/post_list.html:36
+msgid "Created at"
+msgstr "Erstellt um"
+
+#: templates/tinyforum/post_list.html:42
+msgid "Creator of the thread"
+msgstr "Ersteller des Themas"
+
+#: templates/tinyforum/post_list.html:45
+msgid "Staff"
+msgstr "Mitarbeiter"
+
+#: templates/tinyforum/post_list.html:48
+msgid "Joined at: "
+msgstr "Beigetreten um: "
+
+#: templates/tinyforum/post_list.html:49
+msgid "Posts: "
+msgstr "Beiträge: "
+
+#: templates/tinyforum/post_list.html:54 templates/tinyforum/post_list.html:60
+msgid "Show post"
+msgstr "Beitrag anzeigen"
+
+#: templates/tinyforum/post_list.html:54
+msgid "Hide post"
+msgstr "Beitrag ausblenden"
+
+#: templates/tinyforum/post_list.html:56
+msgid ""
+"\n"
+"                    This post has been collapsed by a moderator.\n"
+"                  "
+msgstr ""
+"\n"
+"                    Dieser Beitrag wurde durch einen Moderator geschlossen.\n"
+"                  "
+
+#: templates/tinyforum/post_list.html:75 templates/tinyforum/report_form.html:8
+msgid "Report post"
+msgstr "Beitrag melden"
+
+#: templates/tinyforum/post_list.html:78
+msgid "This post has been reported."
+msgstr "Dieser Beitrag wurde gemeldet."
+
+#: templates/tinyforum/post_list.html:88
+msgid ""
+"\n"
+"                This thread is empty. Be the first one who posts something "
+"about this topic.\n"
+"              "
+msgstr ""
+"\n"
+"                Dieses Thema ist noch leer. Beginnen Sie mit einem Beitrag "
+"dazu.\n"
+"              "
+
+#: templates/tinyforum/post_list.html:101
+msgid "Write a post"
+msgstr "Beitrag schreiben"
+
+#: templates/tinyforum/post_list.html:117
+msgid "This thread is closed."
+msgstr "Dieses Thema ist geschlossen."
+
+#: templates/tinyforum/postreport_list.html:8
+msgid "Moderation"
+msgstr "Moderation"
+
+#: templates/tinyforum/postreport_list.html:22
+msgid "Report by"
+msgstr "Meldung von"
+
+#: templates/tinyforum/postreport_list.html:22
+#: templates/tinyforum/postreport_list.html:33
+msgid "at"
+msgstr "um"
+
+#: templates/tinyforum/postreport_list.html:23
+msgid "Reason"
+msgstr "Grund"
+
+#: templates/tinyforum/postreport_list.html:27
+msgid "Notes"
+msgstr "Notizen"
+
+#: templates/tinyforum/postreport_list.html:32
+msgid "Post"
+msgstr "Beitrag"
+
+#: templates/tinyforum/postreport_list.html:33
+msgid "By"
+msgstr "von"
+
+#: templates/tinyforum/postreport_list.html:33
+msgid "in"
+msgstr ""
+
+#: templates/tinyforum/postreport_list.html:44
+msgid "Yay, all reports have been handled!"
+msgstr "Super, alle Meldungen wurden bearbeitet. "
+
+#: templates/tinyforum/postreport_list.html:46
+msgid "Note! Your own reports, if there are any, are not visisble to you."
+msgstr ""
+"Achtung! Ihre eigenen Meldungen, wenn es welche gibt, sind für Sie nicht "
+"sichtbar."
+
+#: templates/tinyforum/thread_form.html:11
+msgid "Create thread"
+msgstr "Thema erstellen"
+
+#: templates/tinyforum/thread_list.html:13
+msgid "Create new thread"
+msgstr "Neues Thema erstellen"
+
+#: templates/tinyforum/thread_list.html:15
+msgid "Login"
+msgstr "Anmelden"
+
+#: templates/tinyforum/thread_list.html:19
+msgid "Status"
+msgstr ""
+
+#: templates/tinyforum/thread_list.html:20
+msgid "Active"
+msgstr "Aktiv"
+
+#: templates/tinyforum/thread_list.html:21
+msgid "Closed"
+msgstr "Geschlossen"
+
+#: templates/tinyforum/thread_list.html:30
+msgid "Thread"
+msgstr "Thema"
+
+#: templates/tinyforum/thread_list.html:31
+msgid "Posts"
+msgstr "Beiträge"
+
+#: templates/tinyforum/thread_list.html:33
+msgid "Latest post"
+msgstr "Letzter Beitrag"
+
+#: templates/tinyforum/thread_list.html:41
+msgid "Pinned"
+msgstr ""
+
+#: templates/tinyforum/thread_star.html:10
+msgid "Mark this thread"
+msgstr "Dieses Thema markieren"
+
+#: views.py:65 views.py:104
+msgid "Sorry, you do not have permissions."
+msgstr "Entschuldigung, Sie haben nicht die Berechtigung dazu."
+
+#: views.py:125
+msgid "You already reported this post."
+msgstr "Sie haben diesen Beitrag bereits gemeldet."
+
+#: views.py:136
+msgid ""
+"Thank you for the report. A community moderator will deal with it as soon as "
+"possible!"
+msgstr ""
+"Danke für Ihre Meldung. Ein Community-Moderator wird sich so schnell als "
+"möglich darum kümmern!"
