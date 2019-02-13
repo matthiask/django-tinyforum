@@ -13,19 +13,30 @@ Add your own URLconf module:
     from functools import wraps
 
     from django.conf.urls import url
+    from django.contrib import messages
+    from django.contrib.auth.decorators import login_required
+    from django.shortcuts import redirect
+    from django.utils.translation import gettext as _
 
-    from community.decorators import (
-        profile_required,
-        profile_required_if_authenticated,
-        moderator_required,
-    )
     from tinyforum import views
 
 
-    def moderation(fn):
+    def moderator_required(fn):
+        @login_required
+        def view(request, *args, **kwargs):
+            if not request.user.is_staff:
+                messages.error(request, _("You do not have moderation powers."))
+                return redirect("tinyforum:thread-list")
+            return fn(request, *args, **kwargs)
+
+        return view
+
+
+    def add_is_moderator(fn):
         @wraps(fn)
         def dec(request, *args, **kwargs):
-            kwargs["moderation"] = request.user.profile.has_moderation_powers
+            # kwargs["is_moderator"] = request.user.profile.has_moderation_powers
+            kwargs["is_moderator"] = request.user.is_staff
             return fn(request, *args, **kwargs)
 
         return dec
@@ -33,37 +44,27 @@ Add your own URLconf module:
 
     app_name = "tinyforum"
     urlpatterns = [
-        url(
-            r"^$", profile_required_if_authenticated(views.thread_list), name="thread-list"
-        ),
+        url(r"^$", views.thread_list, name="thread-list"),
         url(
             r"^create/$",
-            profile_required(moderation(views.thread_form)),
+            login_required(add_is_moderator(views.thread_form)),
             name="thread-create",
         ),
-        url(
-            r"^(?P<pk>[0-9]+)/$",
-            profile_required_if_authenticated(views.post_list),
-            name="thread-detail",
-        ),
+        url(r"^(?P<pk>[0-9]+)/$", views.post_list, name="thread-detail"),
         url(
             r"^(?P<pk>[0-9]+)/update/$",
-            profile_required(moderation(views.thread_form)),
+            login_required(add_is_moderator(views.thread_form)),
             name="thread-update",
         ),
-        url(
-            r"^(?P<pk>[0-9]+)/star/$",
-            profile_required(views.thread_star),
-            name="thread-star",
-        ),
+        url(r"^(?P<pk>[0-9]+)/star/$", views.thread_star, name="thread-star"),
         url(
             r"^post/(?P<pk>[0-9]+)/update/$",
-            profile_required(moderation(views.post_form)),
+            login_required(add_is_moderator(views.post_form)),
             name="post-update",
         ),
         url(
             r"^post/(?P<pk>[0-9]+)/report/$",
-            profile_required(views.post_report),
+            login_required(views.post_report),
             name="post-report",
         ),
         url(r"^moderation/$", moderator_required(views.report_list), name="report-list"),
