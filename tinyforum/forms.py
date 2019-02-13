@@ -91,21 +91,20 @@ class ModerateThreadForm(UpdateThreadForm, forms.ModelForm):
 
 
 def form_for_thread(request, *, instance=None, is_moderator=False):
-    kw = {
-        "data": request.POST if request.method == "POST" else None,
-        "request": request,
-        "instance": instance,
-    }
-    if not request.user.is_authenticated:
-        return None
-    elif instance is None and is_moderator:
-        return CreateThreadAsModeratorForm(**kw)
-    elif instance is None:
-        return CreateThreadForm(**kw)
-    elif is_moderator:
-        return ModerateThreadForm(**kw)
-    elif request.user == instance.authored_by:
-        return UpdateThreadForm(**kw)
+    if request.user.is_authenticated:
+        kw = {
+            "data": request.POST if request.method == "POST" else None,
+            "request": request,
+            "instance": instance,
+        }
+        if instance is None and is_moderator:
+            return CreateThreadAsModeratorForm(**kw)
+        elif instance is None:
+            return CreateThreadForm(**kw)
+        elif is_moderator:
+            return ModerateThreadForm(**kw)
+        elif request.user == instance.authored_by:
+            return UpdateThreadForm(**kw)
     return None
 
 
