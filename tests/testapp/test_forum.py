@@ -26,8 +26,11 @@ class ForumTests(TestCase):
     def test_posting_a_bit(self):
         c = Client()
         c.force_login(self.user1)
-        response = c.get("/")
-        # print(response.content.decode("utf-8"))
+
+        response = c.get("/create/")
+        self.assertContains(response, 'id="id_title"')
+        self.assertContains(response, 'id="id_text"')
+        self.assertNotContains(response, 'id="id_is_pinned"')
 
         response = c.post(
             "/create/", {"title": "Thread title", "text": "<p>Frsit psot.</p>"}
@@ -170,6 +173,11 @@ class ForumTests(TestCase):
         c = Client()
         c.force_login(self.admin)
         self.assertEqual(c.get("/moderation/").status_code, 200)
+
+        response = c.get("/create/")
+        self.assertContains(response, 'id="id_title"')
+        self.assertContains(response, 'id="id_text"')
+        self.assertContains(response, 'id="id_is_pinned"')
 
     def test_form_functions(self):
         request = SimpleNamespace(method="GET", user=AnonymousUser())

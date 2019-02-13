@@ -47,6 +47,12 @@ class CreateThreadForm(BaseForm, forms.ModelForm):
         return instance
 
 
+class CreateThreadAsModeratorForm(CreateThreadForm):
+    class Meta:
+        model = Thread
+        fields = ("title", "is_pinned")
+
+
 class UpdateThreadForm(BaseForm, forms.ModelForm):
     class Meta:
         model = Thread
@@ -92,11 +98,13 @@ def form_for_thread(request, *, instance=None, is_moderator=False):
     }
     if not request.user.is_authenticated:
         return None
+    elif instance is None and is_moderator:
+        return CreateThreadAsModeratorForm(**kw)
     elif instance is None:
         return CreateThreadForm(**kw)
     elif is_moderator:
         return ModerateThreadForm(**kw)
-    elif instance and request.user == instance.authored_by:
+    elif request.user == instance.authored_by:
         return UpdateThreadForm(**kw)
     return None
 
