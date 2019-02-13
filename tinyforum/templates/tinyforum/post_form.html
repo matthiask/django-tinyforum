@@ -2,37 +2,24 @@
 
 {% load fineforms i18n static %}
 
-{% block extra-body-class %}forum{% endblock %}
-
-{% block lead-title %}
-<h1>{% trans "Edit post" %}</h1>
-{% endblock %}
-
 {% block content %}
+<div class="grid-container">
+  <div class="grid-x grid-padding-x align-center">
+    <div class="cell small-12 medium-9">
 
-<div class="row">
-  <div class="small-11 medium-10 large-9 small-centered columns forum-form">
-    <div class="row">
-      <div class="columns small-11 medium-10 small-centered">
+      <h1>{% trans 'Update post' %}</h1>
 
+      {% if is_moderator %}<h2>Moderation</h2>{% endif %}
 
-        {% if moderation %}<h2>Moderation</h2>{% endif %}
+      <form method="post">
+        {% csrf_token %}
+        {{ form.media }}
+        {% ff_errors form %}
+        {% ff_fields form %}
+        {% ff_submit %}
+      </form>
 
-        <form method="post">
-          {% csrf_token %}
-          {{ form.media }}
-          {% ff_errors form %}
-          <span class="show-for-sr">{{ form.text.label_tag }}</span>
-          {% ff_field form.text type='field-plain' %}
-          {{ form.text.errors }}
-
-          {% ff_fields form exclude='text' %}
-
-          <button type="submit">{% trans 'Submit' %}</button>
-        </form>
-      </div>
     </div>
   </div>
 </div>
-
 {% endblock %}

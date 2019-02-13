@@ -1,10 +1,12 @@
 {% load i18n %}
-<input
-  data-set-status="{% url 'tinyforum:thread-star' pk=thread.id %}"
-  name="starred_{{ thread.id }}"
-  type="checkbox"
-  id="star-{{thread.id}}"
-  class="show-for-sr"
-  {% if status %}checked{% endif %}
-  />
-<label for="star-{{thread.id}}">{% trans 'Mark this thread' %}</label>
+<div class="forum__star">
+  <input
+    data-set-status="{% url 'tinyforum:thread-star' pk=thread.id %}"
+    name="forum_thread_starred_{{ thread.id }}"
+    type="checkbox"
+    id="forum-thread-star-{{ thread.id }}"
+    class="show-for-sr"
+    {% if status %}checked{% endif %}
+    />
+  <label for="forum-thread-star-{{ thread.id }}">{% trans 'Mark this thread' %}</label>
+</div>

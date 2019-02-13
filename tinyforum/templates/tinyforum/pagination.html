@@ -1,46 +1,41 @@
 {% load i18n tinyforum %}
 
 {% if object_list.paginator %}
-  <div class="row">
-    <div class="small-12 columns pagination">
-      {% if object_list.has_previous %}
-        <a href="?page={{ object_list.previous_page_number }}">&laquo;</a>
-      {% else %}
-        <span class="prev">&laquo;</span>
-      {% endif %}
+  <div class="cell small-12 forum__pagination">
+    {% if object_list.has_previous %}
+      <a href="?page={{ object_list.previous_page_number }}">&laquo;</a>
+    {% else %}
+      <span class="prev">&laquo;</span>
+    {% endif %}
 
-      {% for p in object_list.paginator.page_range %}
+    {% for p in object_list.paginator.page_range %}
 
-        {% if forloop.first and not p == object_list.number %}
-          <a href="{% pagination_link page=p %}">{{ p }}</a>
-        {% elif forloop.last and not p == object_list.number %}
-          <a href="{% pagination_link page=p %}">{{ p }}</a>
-        {% elif p <= object_list.number|add:3 and p >= object_list.number|add:-3 %}
+      {% if forloop.first and not p == object_list.number %}
+        <a href="{% pagination_link page=p %}">{{ p }}</a>
+      {% elif forloop.last and not p == object_list.number %}
+        <a href="{% pagination_link page=p %}">{{ p }}</a>
+      {% elif p <= object_list.number|add:3 and p >= object_list.number|add:-3 %}
 
-          {% if p == object_list.number|add:-3 %}
-            <span>…</span>
-          {% endif %}
-
-          {% ifequal p object_list.number %}
-            <a class="mark" aria-label="{% trans 'Current page' %}" href="{% pagination_link page=p %}">{{ p }}</a>
-          {% else %}
-            <a href="{% pagination_link page=p %}">{{ p }}</a>
-          {% endifequal %}
-
-          {% if p == object_list.number|add:3 %}
-            <span>…</span>
-          {% endif %}
+        {% if p == object_list.number|add:-3 %}
+          <span>…</span>
         {% endif %}
-      {% endfor %}
 
-      {% if object_list.has_next %}
-        <a href="?page={{ object_list.next_page_number }}">&raquo;</a>
-      {% else %}
-        <span class="next">&raquo;</span>
+        {% ifequal p object_list.number %}
+          <a class="mark" aria-label="{% trans 'Current page' %}" href="{% pagination_link page=p %}">{{ p }}</a>
+        {% else %}
+          <a href="{% pagination_link page=p %}">{{ p }}</a>
+        {% endifequal %}
+
+        {% if p == object_list.number|add:3 %}
+          <span>…</span>
+        {% endif %}
       {% endif %}
-    </div>
+    {% endfor %}
+
+    {% if object_list.has_next %}
+      <a href="?page={{ object_list.next_page_number }}">&raquo;</a>
+    {% else %}
+      <span class="next">&raquo;</span>
+    {% endif %}
   </div>
 {% endif %}
-
-
-
