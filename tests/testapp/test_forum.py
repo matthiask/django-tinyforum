@@ -246,3 +246,29 @@ class ForumTests(TestCase):
         response = c.get(t_star_url + "?status=0")
         self.assertContains(response, '"status": 0')
         self.assertEqual(t.starred_by.count(), 0)
+
+    def test_post_str(self):
+        t = Thread.objects.create(title="One", authored_by=self.user1)
+        p = Post.objects.create(
+            thread=t,
+            authored_by=self.user1,
+            text="<p>Lorem ipsum dolor sit amet.</p> " * 20,
+        )
+        self.assertEqual(
+            str(p),
+            "Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem"
+            " ipsum dolor sit amet. Lorem ipsum dolor sit amet....",
+        )
+
+    def test_thread_absolute_url(self):
+        t = Thread.objects.create(title="One", authored_by=self.user1)
+        url = t.get_absolute_url()
+
+        t.moderation_status = t.FLAGGED
+        self.assertEqual(t.get_absolute_url(), url)
+
+        t.moderation_status = t.COLLAPSED
+        self.assertEqual(t.get_absolute_url(), url)
+
+        t.moderation_status = t.HIDDEN
+        self.assertEqual(t.get_absolute_url(), "/")
