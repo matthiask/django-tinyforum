@@ -156,22 +156,19 @@ class ModeratePostForm(BasePostForm, forms.ModelForm):
 
 
 def form_for_post(request, *, thread, instance=None, is_moderator=False):
-    kw = {
-        "data": request.POST if request.method == "POST" else None,
-        "request": request,
-        "instance": instance,
-        "thread": thread,
-    }
-    if not request.user.is_authenticated:
-        return None
-    elif thread.closed_at:
-        return None
-    elif is_moderator:
-        return ModeratePostForm(**kw)
-    elif instance and request.user == instance.authored_by:
-        return UpdatePostForm(**kw)
-    elif instance is None:
-        return CreatePostForm(**kw)
+    if request.user.is_authenticated and not thread.closed_at:
+        kw = {
+            "data": request.POST if request.method == "POST" else None,
+            "request": request,
+            "instance": instance,
+            "thread": thread,
+        }
+        if instance is None:
+            return CreatePostForm(**kw)
+        elif is_moderator:
+            return ModeratePostForm(**kw)
+        elif request.user == instance.authored_by:
+            return UpdatePostForm(**kw)
     return None
 
 

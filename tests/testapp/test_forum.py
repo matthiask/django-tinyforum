@@ -179,6 +179,11 @@ class ForumTests(TestCase):
         self.assertContains(response, 'id="id_text"')
         self.assertContains(response, 'id="id_is_pinned"')
 
+        t = Thread.objects.create(title="One", authored_by=self.user1)
+        response = c.get(t.get_absolute_url())
+        self.assertContains(response, 'id="id_text"')
+        self.assertNotContains(response, 'id="id_moderation_status_0"')
+
     def test_form_functions(self):
         request = SimpleNamespace(method="GET", user=AnonymousUser())
 
