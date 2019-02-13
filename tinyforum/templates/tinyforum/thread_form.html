@@ -23,8 +23,6 @@
 
         <form method="post">
           {% csrf_token %}
-          <script src="{% static 'webapp/lib/emojione.min.js' %}"></script>
-          <script>CKEDITOR_BASEPATH='{% static "ckeditor/ckeditor/" %}';</script>
           {{ form.media }}
           {% ff_errors form %}
           {% ff_fields form %}

@@ -101,8 +101,6 @@
         <h2>{% trans "Write a post" %}</h2>
         <form method="post" action=".">
           {% csrf_token %}
-          <script src="{% static 'webapp/lib/emojione.min.js' %}"></script>
-          <script>CKEDITOR_BASEPATH='{% static "ckeditor/ckeditor/" %}';</script>
           {{ form.media }}
           {% ff_errors form %}
           <span class="show-for-sr">{{ form.text.label_tag }}</span>
