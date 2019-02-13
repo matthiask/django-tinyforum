@@ -51,9 +51,9 @@ def post_list(request, pk):
     )
 
 
-def thread_form(request, *, pk=None, moderation=False):
+def thread_form(request, *, pk=None, is_moderator=False):
     instance = pk and get_object_or_404(Thread, pk=pk)
-    form = form_for_thread(request, instance=instance, moderation=moderation)
+    form = form_for_thread(request, instance=instance, is_moderator=is_moderator)
 
     if form is None:
         messages.error(request, _("Sorry, you do not have permissions."))
@@ -68,8 +68,8 @@ def thread_form(request, *, pk=None, moderation=False):
         instance or Thread,
         {
             "form": form,
-            "moderation": (
-                moderation and instance and instance.authored_by != request.user
+            "is_moderator": (
+                is_moderator and instance and instance.authored_by != request.user
             ),
         },
         template_name_suffix="_form",
@@ -91,10 +91,10 @@ def thread_star(request, pk):
     return JsonResponse({"thread": instance.pk, "status": int(status)})
 
 
-def post_form(request, *, pk, moderation=False):
+def post_form(request, *, pk, is_moderator=False):
     instance = get_object_or_404(Post.objects.select_related("thread"), pk=pk)
     form = form_for_post(
-        request, thread=instance.thread, instance=instance, moderation=moderation
+        request, thread=instance.thread, instance=instance, is_moderator=is_moderator
     )
 
     if form is None:
@@ -110,7 +110,7 @@ def post_form(request, *, pk, moderation=False):
         instance,
         {
             "form": form,
-            "moderation": (moderation and instance.authored_by != request.user),
+            "is_moderator": is_moderator and instance.authored_by != request.user,
         },
         template_name_suffix="_form",
     )

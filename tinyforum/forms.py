@@ -84,7 +84,7 @@ class ModerateThreadForm(UpdateThreadForm, forms.ModelForm):
         fields = ("title", "is_pinned", "moderation_status")
 
 
-def form_for_thread(request, *, instance=None, moderation=False):
+def form_for_thread(request, *, instance=None, is_moderator=False):
     kw = {
         "data": request.POST if request.method == "POST" else None,
         "request": request,
@@ -94,7 +94,7 @@ def form_for_thread(request, *, instance=None, moderation=False):
         return None
     elif instance is None:
         return CreateThreadForm(**kw)
-    elif moderation:
+    elif is_moderator:
         return ModerateThreadForm(**kw)
     elif instance and request.user == instance.authored_by:
         return UpdateThreadForm(**kw)
@@ -147,7 +147,7 @@ class ModeratePostForm(BasePostForm, forms.ModelForm):
         fields = ("text", "moderation_status")
 
 
-def form_for_post(request, *, thread, instance=None, moderation=False):
+def form_for_post(request, *, thread, instance=None, is_moderator=False):
     kw = {
         "data": request.POST if request.method == "POST" else None,
         "request": request,
@@ -158,7 +158,7 @@ def form_for_post(request, *, thread, instance=None, moderation=False):
         return None
     elif thread.closed_at:
         return None
-    elif moderation:
+    elif is_moderator:
         return ModeratePostForm(**kw)
     elif instance and request.user == instance.authored_by:
         return UpdatePostForm(**kw)
