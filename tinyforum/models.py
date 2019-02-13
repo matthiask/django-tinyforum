@@ -108,10 +108,7 @@ class Post(BaseModel):
     thread = models.ForeignKey(
         Thread, on_delete=models.CASCADE, verbose_name=_("thread"), related_name="posts"
     )
-    text = RichTextField(
-        _("text"),
-        config_name="tinyforum-post",
-    )
+    text = RichTextField(_("text"), config_name="tinyforum-post")
 
     class Meta:
         ordering = ["created_at"]

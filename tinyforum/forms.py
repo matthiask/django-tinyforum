@@ -25,10 +25,7 @@ class BaseForm(forms.Form):
 
 
 class CreateThreadForm(BaseForm, forms.ModelForm):
-    text = RichTextFormField(
-        label=_("text"),
-        config_name="tinyforum-post",
-    )
+    text = RichTextFormField(label=_("text"), config_name="tinyforum-post")
 
     class Meta:
         model = Thread
