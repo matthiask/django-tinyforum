@@ -10,7 +10,7 @@
     <div class="cell medium-6 forum__controls">
 
       {% if request.user.is_authenticated %}
-        <a class="button" href="{% url 'tinyforum:thread-create' %}">{% trans "Create new thread" %}</a>
+        <a class="button" href="{% url 'tinyforum:thread-create' %}">{% trans "Start new discussion" %}</a>
       {% else %}
         <a class="button" href="{% url 'login' %}">{% trans "Login" %}</a>
       {% endif %}
@@ -18,32 +18,31 @@
     </div>
 
     <div class="cell medium-6 forum__filter">
-
       {% trans "Status" %}:
-      <a class="thread-filter__link{% if request.GET.status != "closed" %} thread-filter__link--active{% endif %}" href=".">{% trans "Active" %}</a>
-      <a class="thread-filter__link{% if request.GET.status == "closed" %} thread-filter__link--active{% endif %}" href="?status=closed">{% trans "Closed" %}</a>
-
+      <a class="forum__filter-link {% if request.GET.status != "closed" %}forum__filter-link--active{% endif %}" href=".">{% trans "Active" %}</a>
+      <a class="forum__filter-link {% if request.GET.status == "closed" %}forum__filter-link--active{% endif %}" href="?status=closed">{% trans "Closed" %}</a>
     </div>
 
     <div class="cell small-12 forum__threads">
       {% for thread in object_list %}
-      <div class="forum__thread {% if thread.is_pinned %}forum__thread--pinned{% endif %}">
-        <a href="{{ thread.get_absolute_url }}?page=last">
+      <a href="{{ thread.get_absolute_url }}?page=last" class="grid-x grid-padding-x forum__thread {% if thread.is_pinned %}forum__thread--pinned{% endif %}">
+        <div class="cell small-11">
           <h2 class="forum__thread-title">{{ thread.title }}</h2>
-          <span class="forum__thread-byline">
-            {% blocktrans with author=thread.authored_by day=thread.created_at|date:'SHORT_DATE_FORMAT' trimmed %}
-            Started by {{ author }} on {{ day }}.{% endblocktrans %}
-            {% blocktrans with posts=thread.post_count %}{{ posts }} posts.{% endblocktrans %}
-          </span>
-          <span clas="forum__thread-lastupdate">
-            {% blocktrans with author=thread.latest_post.authored_by day=thread.latest_post.created_at|date:'SHORT_DATE_FORMAT' trimmed %}
-            Latest post by {{ author }} on {{ day }}.
+          <small class="forum__thread-byline">
+            {% blocktrans with author=thread.authored_by ago=thread.created_at|timesince trimmed %}
+            Started {{ ago }} ago by {{ author }}.
             {% endblocktrans %}
-          </span>
-        </a>
 
-        <div class="forum__star">{% thread_star thread %}</div>
-      </div>
+            {% blocktrans with author=thread.latest_post.authored_by ago=thread.latest_post.created_at|timesince trimmed %}
+            Latest post by {{ author }} {{ ago }} ago.
+            {% endblocktrans %}
+          </small>
+        </div>
+        <div class="cell small-1">
+          &#x1f4ac; {{ thread.post_count }}
+        </div>
+        {# <div class="forum__star">{% thread_star thread %}</div> #}
+      </a>
       {% endfor %}
     </div>
 

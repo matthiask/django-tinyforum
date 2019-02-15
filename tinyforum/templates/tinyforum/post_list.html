@@ -8,9 +8,8 @@
 
 {% block content %}
 <div class="grid-container">
-  <div class="grid-x grid-padding-x align-center thread">
-    <div class="cell">
-      <h1 class="thread__title">{{ thread }}</h1>
+  <div class="grid-x grid-padding-x align-center forum">
+    <div class="cell forum__controls">
       <a class="button"
          href="{% url 'tinyforum:thread-list' %}">{% trans 'Back to thread list' %}</a>
       {% if user == thread.authored_by.profile.user or user.is_staff %}  {# FIXME better: is_moderator #}
@@ -18,107 +17,77 @@
          href="{% url 'tinyforum:thread-update' pk=thread.pk %}">{% trans 'Update thread' %}</a>
       {% endif %}
     </div>
-  </div>
 
-  <div class="grid-x grid-padding-x">
-    <section class="small-12 cell thread">
-      <header>
-        <div class="thread__header">
-          <div class="grid-x grid-padding-x">
-            <div class="cell show-for-medium medium-2">{% trans 'Author' %}</div>
-            <div class="cell show-for-medium medium-10">{% trans 'Message' %}</div>
-          </div>
-        </div>
-      </header>
+    <div class="cell">
+      <h1 class="forum__title">{{ thread }}</h1>
+    </div>
 
-      {% for post in object_list %}
-        <article class="post post__state-{{ post.moderation_status }}">
-          <div class="grid-x grid-padding-x">
-            <header class="cell small-12 post__header">
-              <h2 class="show-for-sr">#{{ forloop.counter }} {% trans 'Post by' %} {{ post.authored_by.profile }}</h2>
-              {% trans 'Created at' %}: <time datetime="{{ post.created_at|date:'Y-m-d\TH:i' }}">{{ post.created_at|date:'j.m.Y H:i' }}</time>
-            </header>
-            <div class="cell small-12 medium-2 post__info">
-              <span class="post__author">{{ post.authored_by.profile }}</span>
+    {% for post in object_list %}
+    <div class="cell forum__post">
+      <h2 class="forum__post-title">
+        {% blocktrans with author=post.authored_by ago=post.created_at|timesince trimmed %}
+          {{ author }} posted {{ ago }} ago
+        {% endblocktrans %}
 
-              {% if thread.authored_by == post.authored_by %}
-                <label class="post__thread-author label">{% trans 'Creator of the thread' %}</label>
-              {% endif %}
-              {% if post.authored_by.profile.has_moderation_powers %}
-                <label class="post__thread-author label">{% trans 'Staff' %}</label>
-              {% endif %}
-              <div class="post__meta">
-                <span class="post__date-joined">{% trans "Joined at: " %}<time datetime="{{ post.authored_by.date_joined|date:'Y-m-d\TH:i' }}">{{ post.authored_by.date_joined|date:'j.m.Y' }}</time></span>
-                <span class="post__post-counter">{% trans "Posts: " %} {{ post.authored_by.profile.post_count }}</span>
-              </div>
-            </div>
-            <div class="cell small-12 medium-10 post__content">
-              {% if post.moderation_status == 'collapsed' %}
-                <div class="post-collapse" data-collapse-show="{% trans "Show post" %}" data-collapse-hide="{% trans "Hide post" %}" data-collapse>
-                  <p class="post-collapse__description">
-                    {% blocktrans %}
-                      This post has been collapsed by a moderator.
-                    {% endblocktrans %}
-                  </p>
-                  <a href="#" class="forum-link" data-collapse-button>{% trans "Show post" %}</a>
-                  <div class="post-collapse__content" data-collapse-content>
-                    {{ post.text|safe }}
-                  </div>
-                </div>
-              {% else %}
-                {{ post.text|safe }}
-              {% endif %}
+        {% if post.authored_by == thread.authored_by %}
+          <span class="forum__badge">{% trans 'Author' %}</span>
+        {% endif %}
+        {% if post.authored_by.is_staff %}  {# FIXME has_moderation_powers #}
+          <span class="forum__badge">{% trans 'Moderator' %}</span>
+        {% endif %}
 
+      </h2>
+
+      <div class="forum__post-text">
+        {% if post.moderation_status == 'collapsed' %}
+          <div class="post-collapse" data-collapse-show="{% trans "Show post" %}" data-collapse-hide="{% trans "Hide post" %}" data-collapse>
+            <p class="post-collapse__description">
+              {% blocktrans %}
+                This post has been collapsed by a moderator.
+              {% endblocktrans %}
+            </p>
+            <a href="#" class="forum-link" data-collapse-button>{% trans "Show post" %}</a>
+            <div class="post-collapse__content" data-collapse-content>
+              {{ post.text|safe }}
             </div>
           </div>
-          <div class="post__footer">
-            {% if user == post.authored_by or user.profile.has_moderation_powers %}
-              <a class="edit-link" href="{% url 'tinyforum:post-update' pk=post.pk %}">{% trans "Edit post" %}</a>
-            {% endif %}
-            <a class="report-link" href="{% url 'tinyforum:post-report' pk=post.pk %}">{% trans "Report post" %}</a>
-            {% if post.moderation_status == 'flagged' %}
-              <div>
-                <small>{% trans "This post has been reported." %}</small>
-              </div>
-            {% endif %}
-          </div>
-        </article>
-      {% empty %}
-        <article class="post post--empty">
-          <div class="grid-x grid-padding-x">
-            <div class="cell small-12">
-              <p>
-                {% blocktrans %}
-                  This thread is empty. Be the first one who posts something about this topic.
-                {% endblocktrans %}
-              </p>
-            </div>
-          </div>
-        </article>
-      {% endfor %}
+        {% else %}
+          {{ post.text|safe }}
+        {% endif %}
 
-      {% include "tinyforum/pagination.html" %}
+      </div>
 
-      {% if form %}
-        <section class="thread__editor">
-          <h2>{% trans "Write a post" %}</h2>
-          <form method="post" action=".">
-            {% csrf_token %}
-            {{ form.media }}
-            {% ff_errors form %}
-            <span class="show-for-sr">{{ form.text.label_tag }}</span>
-            {% ff_field form.text type='field-plain' %}
-            {{ form.text.errors }}
+      <small class="forum__post-actions">
+        {% if user == post.authored_by or user.profile.has_moderation_powers %}
+          <a href="{% url 'tinyforum:post-update' pk=post.pk %}">{% trans "Edit" %}</a>
+        {% endif %}
+          <a href="{% url 'tinyforum:post-report' pk=post.pk %}">{% trans "Report" %}</a>
+        {% if post.moderation_status == 'flagged' %}
+          <small>{% trans "This post has been reported." %}</small>
+        {% endif %}
+      </small>
 
-            <button type="submit">{% trans 'Submit' %}</button>
-          </form>
-        </section>
-      {% elif thread.closed_at %}
-        <section>
-          <h2 class="text-center">{% trans 'This thread is closed.' %}</h2>
-        </section>
-      {% endif %}
-    </section>
+    </div>
+    {% endfor %}
+
+    {% if form %}
+      <section class="cell forum__editor">
+        <h2>{% trans "Write a post" %}</h2>
+        <form method="post" action=".">
+          {% csrf_token %}
+          {{ form.media }}
+          {% ff_errors form %}
+          {% ff_fields form %}
+          {% ff_submit %}
+        </form>
+      </section>
+    {% elif thread.closed_at %}
+      <section>
+        <h2 class="text-center">{% trans 'This thread is closed.' %}</h2>
+      </section>
+    {% endif %}
+
+    {% include "tinyforum/pagination.html" %}
   </div>
 </div>
 
