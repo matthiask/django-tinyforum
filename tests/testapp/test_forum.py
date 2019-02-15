@@ -79,7 +79,7 @@ class ForumTests(TestCase):
         self.assertNotContains(response, 'for="id_close_thread"')
 
         response = c.get("/?status=closed")
-        self.assertContains(response, '<a href="/%s/?page=last">' % thread.pk)
+        self.assertContains(response, 'href="/%s/?page=last"' % thread.pk)
 
     def test_thread_list(self):
         Thread.objects.create(title="One", authored_by=self.user1)
