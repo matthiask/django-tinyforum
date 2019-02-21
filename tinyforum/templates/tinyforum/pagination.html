@@ -3,7 +3,7 @@
 {% if object_list.paginator %}
   <div class="cell small-12 forum__pagination">
     {% if object_list.has_previous %}
-      <a href="?page={{ object_list.previous_page_number }}">&laquo;</a>
+      <a href="{% pagination_link page=object_list.previous_page_number %}">&laquo;</a>
     {% else %}
       <span class="prev">&laquo;</span>
     {% endif %}
@@ -33,7 +33,7 @@
     {% endfor %}
 
     {% if object_list.has_next %}
-      <a href="?page={{ object_list.next_page_number }}">&raquo;</a>
+      <a href="{% pagination_link page=object_list.next_page_number %}">&raquo;</a>
     {% else %}
       <span class="next">&raquo;</span>
     {% endif %}
