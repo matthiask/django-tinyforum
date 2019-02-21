@@ -3,8 +3,6 @@ from django.utils import timezone
 from django.utils.text import capfirst
 from django.utils.translation import ugettext_lazy as _
 
-from ckeditor.fields import RichTextFormField
-
 from tinyforum import signals
 from tinyforum.models import Thread, Post, PostReport
 
@@ -25,11 +23,13 @@ class BaseForm(forms.Form):
 
 
 class CreateThreadForm(BaseForm, forms.ModelForm):
-    text = RichTextFormField(label=_("text"), config_name="tinyforum-post")
-
     class Meta:
         model = Thread
         fields = ("title",)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["text"] = Post._meta.get_field("text").formfield()
 
     def save(self):
         instance = super().save()
