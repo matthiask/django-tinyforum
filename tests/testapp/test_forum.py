@@ -223,7 +223,7 @@ class ForumTests(TestCase):
         c.force_login(self.admin)
 
         response = c.get("/moderation/")
-        self.assertContains(response, "It&#39;s spam", 1)
+        self.assertRegex(response.content.decode("utf-8"), "It&#(39|x27);s spam")
 
         r = PostReport.objects.get()
         r_handle_url = reverse("tinyforum:report-handle", kwargs={"pk": r.pk})
