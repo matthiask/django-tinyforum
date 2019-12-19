@@ -195,7 +195,7 @@ class CreatePostReportForm(BaseForm, forms.ModelForm):
 class HandlePostReportForm(BaseForm, forms.ModelForm):
     moderation_status = forms.ChoiceField(
         label=capfirst(_("moderation status")),
-        choices=PostReport.MODERATION_STATUS_CHOICES,
+        choices=PostReport.MODERATION_ACTION_CHOICES,
         widget=forms.RadioSelect,
     )
 

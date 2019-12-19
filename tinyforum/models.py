@@ -25,6 +25,10 @@ class BaseModel(models.Model):
         (FLAGGED, _("flagged")),
         (HIDDEN, _("hidden")),
     )
+    MODERATION_ACTION_CHOICES = (
+        (GOOD, _("approve content")),
+        (HIDDEN, _("hide content")),
+    )
 
     created_at = models.DateTimeField(_("created at"), default=timezone.now)
     authored_by = models.ForeignKey(
