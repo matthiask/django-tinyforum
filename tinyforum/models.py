@@ -18,13 +18,11 @@ class BaseQuerySet(models.QuerySet):
 class BaseModel(models.Model):
     GOOD = "good"
     FLAGGED = "flagged"
-    COLLAPSED = "collapsed"
     HIDDEN = "hidden"
 
     MODERATION_STATUS_CHOICES = (
         (GOOD, _("good")),
         (FLAGGED, _("flagged")),
-        (COLLAPSED, _("collapsed")),
         (HIDDEN, _("hidden")),
     )
 

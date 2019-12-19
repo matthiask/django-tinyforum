@@ -48,10 +48,6 @@ msgstr "Gut"
 msgid "flagged"
 msgstr "Markiert"
 
-#: models.py:27
-msgid "collapsed"
-msgstr "zusammengefasst"
-
 #: models.py:28
 msgid "hidden"
 msgstr "versteckt"
@@ -206,16 +202,6 @@ msgstr "Beitrag anzeigen"
 #: templates/tinyforum/post_list.html:54
 msgid "Hide post"
 msgstr "Beitrag ausblenden"
-
-#: templates/tinyforum/post_list.html:56
-msgid ""
-"\n"
-"                    This post has been collapsed by a moderator.\n"
-"                  "
-msgstr ""
-"\n"
-"                    Dieser Beitrag wurde durch einen Moderator geschlossen.\n"
-"                  "
 
 #: templates/tinyforum/post_list.html:75 templates/tinyforum/report_form.html:8
 msgid "Report post"

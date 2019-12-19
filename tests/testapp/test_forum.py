@@ -280,8 +280,5 @@ class ForumTests(TestCase):
         t.moderation_status = t.FLAGGED
         self.assertEqual(t.get_absolute_url(), url)
 
-        t.moderation_status = t.COLLAPSED
-        self.assertEqual(t.get_absolute_url(), url)
-
         t.moderation_status = t.HIDDEN
         self.assertEqual(t.get_absolute_url(), "/")

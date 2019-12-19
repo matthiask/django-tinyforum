@@ -38,7 +38,6 @@ class Migration(migrations.Migration):
                         choices=[
                             ("good", "good"),
                             ("flagged", "flagged"),
-                            ("collapsed", "collapsed"),
                             ("hidden", "hidden"),
                         ],
                         default="good",
@@ -113,7 +112,6 @@ class Migration(migrations.Migration):
                         choices=[
                             ("good", "good"),
                             ("flagged", "flagged"),
-                            ("collapsed", "collapsed"),
                             ("hidden", "hidden"),
                         ],
                         max_length=10,
@@ -178,7 +176,6 @@ class Migration(migrations.Migration):
                         choices=[
                             ("good", "good"),
                             ("flagged", "flagged"),
-                            ("collapsed", "collapsed"),
                             ("hidden", "hidden"),
                         ],
                         default="good",

@@ -39,22 +39,7 @@
       </h2>
 
       <div class="forum__post-text">
-        {% if post.moderation_status == 'collapsed' %}
-          <div class="post-collapse" data-collapse-show="{% trans "Show post" %}" data-collapse-hide="{% trans "Hide post" %}" data-collapse>
-            <p class="post-collapse__description">
-              {% blocktrans %}
-                This post has been collapsed by a moderator.
-              {% endblocktrans %}
-            </p>
-            <a href="#" class="forum-link" data-collapse-button>{% trans "Show post" %}</a>
-            <div class="post-collapse__content" data-collapse-content>
-              {{ post.text|safe }}
-            </div>
-          </div>
-        {% else %}
-          {{ post.text|safe }}
-        {% endif %}
-
+        {{ post.text|safe }}
       </div>
 
       <small class="forum__post-actions">

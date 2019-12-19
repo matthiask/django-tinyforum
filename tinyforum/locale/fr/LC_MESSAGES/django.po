@@ -49,10 +49,6 @@ msgstr "bien"
 msgid "flagged"
 msgstr "signalé"
 
-#: models.py:27
-msgid "collapsed"
-msgstr "s'est effondré"
-
 #: models.py:28
 msgid "hidden"
 msgstr "caché"
@@ -207,16 +203,6 @@ msgstr "Montrer l'intervention"
 #: templates/tinyforum/post_list.html:54
 msgid "Hide post"
 msgstr "Cacher intervention"
-
-#: templates/tinyforum/post_list.html:56
-msgid ""
-"\n"
-"                    This post has been collapsed by a moderator.\n"
-"                  "
-msgstr ""
-"\n"
-"                    Ce message a été effondré par un modérateur.\n"
-"                  "
 
 #: templates/tinyforum/post_list.html:75 templates/tinyforum/report_form.html:8
 msgid "Report post"
