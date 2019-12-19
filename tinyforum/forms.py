@@ -184,6 +184,11 @@ class CreatePostReportForm(BaseForm, forms.ModelForm):
         instance = super().save(commit=False)
         instance.post = self.post
         instance.save()
+
+        if instance.post.moderation_status == instance.post.GOOD:
+            instance.post.moderation_status = instance.post.FLAGGED
+            instance.post.save()
+
         return instance
 
 

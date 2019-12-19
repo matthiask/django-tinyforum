@@ -151,7 +151,7 @@ class Report(BaseModel):
         _("moderation status"),
         max_length=10,
         choices=BaseModel.MODERATION_STATUS_CHOICES,
-        blank=True,
+        default=BaseModel.FLAGGED,
     )
 
     class Meta:

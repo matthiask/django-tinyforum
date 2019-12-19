@@ -219,6 +219,9 @@ class ForumTests(TestCase):
         self.assertRedirects(response, t.get_absolute_url())
         self.assertEqual(messages(response), ["You already reported this post."])
 
+        p.refresh_from_db()
+        self.assertEqual(p.moderation_status, p.FLAGGED)
+
         c = Client()
         c.force_login(self.admin)
 
@@ -234,11 +237,25 @@ class ForumTests(TestCase):
         response = c.post(r_handle_url, {})
         self.assertEqual(response.status_code, 200)
 
-        response = c.post(r_handle_url, {"moderation_status": "flagged"})
+        response = c.post(r_handle_url, {"moderation_status": "hidden"})
         self.assertRedirects(response, "/moderation/")
 
         p.refresh_from_db()
-        self.assertEqual(p.moderation_status, "flagged")
+        self.assertEqual(p.moderation_status, "hidden")
+
+        response = c.post(p_report_url, {"reason": "spam", "notes": "stuff"})
+        self.assertRedirects(response, t.get_absolute_url())
+        self.assertEqual(
+            messages(response),
+            [
+                "Thank you for the report. A community moderator will"
+                " deal with it as soon as possible!"
+            ],
+        )
+
+        # Still hidden
+        p.refresh_from_db()
+        self.assertEqual(p.moderation_status, "hidden")
 
     def test_thread_star(self):
         t = Thread.objects.create(title="One", authored_by=self.user1)

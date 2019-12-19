@@ -108,12 +108,12 @@ class Migration(migrations.Migration):
                 (
                     "moderation_status",
                     models.CharField(
-                        blank=True,
                         choices=[
                             ("good", "good"),
                             ("flagged", "flagged"),
                             ("hidden", "hidden"),
                         ],
+                        default="flagged",
                         max_length=10,
                         verbose_name="moderation status",
                     ),
