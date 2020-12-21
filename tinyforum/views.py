@@ -4,12 +4,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import gettext as _
 
 from tinyforum.forms import (
-    form_for_thread,
-    form_for_post,
     CreatePostReportForm,
     HandlePostReportForm,
+    form_for_post,
+    form_for_thread,
 )
-from tinyforum.models import Thread, Post, PostReport
+from tinyforum.models import Post, PostReport, Thread
 from tinyforum.utils import paginate_list, render_detail, render_list
 
 

@@ -5,7 +5,7 @@ from django.contrib.messages import get_messages
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from tinyforum.forms import form_for_thread, form_for_post
+from tinyforum.forms import form_for_post, form_for_thread
 from tinyforum.models import Post, PostReport, Thread
 
 

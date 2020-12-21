@@ -4,7 +4,7 @@ from django.utils.text import capfirst
 from django.utils.translation import gettext_lazy as _
 
 from tinyforum import signals
-from tinyforum.models import Thread, Post, PostReport
+from tinyforum.models import Post, PostReport, Thread
 
 
 class BaseForm(forms.Form):
